@@ -13,7 +13,6 @@ import LiveTraffic from "../components/home/LiveTraffic";
 function Home() {
   return (
     <>
-        <RouteSearch />
       <Hero />
       <Features />
       <HowItWorks />

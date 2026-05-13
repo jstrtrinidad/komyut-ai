@@ -24,7 +24,7 @@ function Testimonials() {
       <div className="mx-auto max-w-7xl">
         {/* Heading */}
         <div className="text-center">
-          <h2 className="text-5xl font-black text-black">
+          <h2 className="text-5xl font-bold text-black">
             Loved by daily commuters
           </h2>
 

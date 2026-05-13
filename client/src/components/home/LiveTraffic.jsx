@@ -39,7 +39,7 @@ function LiveTraffic() {
           </div>
 
           {/* Heading */}
-          <h2 className="mt-8 text-5xl font-black leading-tight text-black">
+          <h2 className="mt-8 text-5xl font-bold leading-tight text-black">
             Real-Time Traffic Monitoring
           </h2>
 

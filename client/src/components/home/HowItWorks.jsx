@@ -37,7 +37,7 @@ function HowItWorks() {
             Smart Commuting Process
           </div>
 
-          <h2 className="mt-8 text-5xl font-black leading-tight text-black">
+          <h2 className="mt-8 text-5xl font-bold leading-tight text-black">
             How Komyut AI Works
           </h2>
 
@@ -66,7 +66,7 @@ function HowItWorks() {
                 </div>
 
                 {/* Content */}
-                <h3 className="mt-8 text-3xl font-black text-black">
+                <h3 className="mt-8 text-3xl font-bold text-black">
                   {step.title}
                 </h3>
 

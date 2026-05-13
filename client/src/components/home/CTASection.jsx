@@ -2,7 +2,7 @@ function CTASection() {
   return (
     <section className="bg-[#f8f6f1] px-6 py-24">
       <div className="mx-auto max-w-6xl rounded-[40px] bg-[#f4b400] px-10 py-20 text-center shadow-xl md:px-20">
-        <h2 className="mx-auto max-w-4xl text-5xl font-black leading-tight text-black">
+        <h2 className="mx-auto max-w-4xl text-5xl font-bold leading-tight text-black">
           Start commuting smarter around Metro Manila today.
         </h2>
 

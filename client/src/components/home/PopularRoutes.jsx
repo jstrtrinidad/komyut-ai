@@ -14,7 +14,7 @@ function PopularRoutes() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-5xl font-black text-black">
+            <h2 className="text-5xl font-bold text-black">
               Popular Destinations
             </h2>
 
@@ -46,7 +46,7 @@ function PopularRoutes() {
 
               {/* Content */}
               <div className="p-8">
-                <h3 className="text-3xl font-black text-black">
+                <h3 className="text-3xl font-bold text-black">
                   {place}
                 </h3>
 

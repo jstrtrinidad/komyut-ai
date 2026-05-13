@@ -38,7 +38,7 @@ function AISection() {
           </div>
 
           {/* Heading */}
-          <h2 className="mt-8 text-5xl font-black leading-tight text-black">
+          <h2 className="mt-8 text-5xl font-bold leading-tight text-black">
             Personalized
             <br />
             Commute Intelligence
@@ -73,7 +73,7 @@ function AISection() {
                       {item.title}
                     </p>
 
-                    <h3 className="mt-4 text-4xl font-black text-black">
+                    <h3 className="mt-4 text-4xl font-bold text-black">
                       {item.value}
                     </h3>
                   </div>

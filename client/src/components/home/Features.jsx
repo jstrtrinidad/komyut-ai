@@ -41,7 +41,7 @@ function Features() {
       <div className="mx-auto max-w-7xl">
         {/* Heading */}
         <div className="text-center">
-          <h2 className="text-5xl font-black leading-tight text-black">
+          <h2 className="text-5xl font-bold leading-tight text-black">
             Why commute smarter with
             <span className="text-[#f4b400]">
               {" "}
