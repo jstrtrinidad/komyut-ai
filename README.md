@@ -1,1 +1,0 @@
-# komyut-ai
