@@ -14,22 +14,23 @@ import VerifyOTP from "../pages/auth/VerifyOTP";
 import Dashboard from "../pages/admin/Dashboard";
 import ProtectedRoute from "./ProtectedRoute";
 
-
 function AppRoutes() {
   return (
     <Routes>
+      {/* Mga routes na gumagamit ng Main Layout (May navbar ng Homepage) */}
       <Route path="/" element={<MainLayout />}>
         <Route index element={<Home />} />
         <Route path="about" element={<About />} />
         <Route path="faq" element={<FAQ />} />
         <Route path="privacy-policy" element={<PrivacyPolicy />} />
         <Route path="terms-and-conditions" element={<TermsConditions />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/verify-otp" element={<VerifyOTP />} />
-        <Route path="*" element={<NotFound />} />
+        <Route path="login" element={<Login />} />
+        <Route path="register" element={<Register />} />
+        <Route path="verify-otp" element={<VerifyOTP />} />
+        
+        {/* Admin Dashboard Protected Route */}
         <Route
-          path="/admin/dashboard"
+          path="admin/dashboard"
           element={
             <ProtectedRoute>
               <Dashboard />
@@ -38,13 +39,11 @@ function AppRoutes() {
         />
       </Route>
 
-<<<<<<< HEAD
-<Route path="/map" element={<MapPage />} />
+      {/* Hiwalay na Full-Screen Map Page (Walang magpapatong na lumang navbar) */}
+      <Route path="/map" element={<MapPage />} />
 
+      {/* Catch-all Route para sa 404 Page */}
       <Route path="*" element={<NotFound />} />
-=======
-      
->>>>>>> 7455a55699b0f0a58bb51ebbc423838c03aa4691
     </Routes>
   );
 }
