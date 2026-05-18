@@ -48,15 +48,14 @@ function Footer() {
             Metro Manila
           </h3>
 
-          <p className="mt-5 leading-relaxed text-[#5f6368]">
+          <div className="mt-5 leading-relaxed text-[#5f6368]">
             Designed for Filipino commuters navigating the city smarter
             every day.
 
             <p className="mt-10 text-sm text-[#9aa0a6]">
-            © 2026 Komyut AI. Designed for smarter Metro Manila commuting.
+              © 2026 Komyut AI. Designed for smarter Metro Manila commuting.
             </p>
-          </p>
-          
+          </div>
         </div>
       </div>
     </footer>

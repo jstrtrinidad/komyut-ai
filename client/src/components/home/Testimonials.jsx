@@ -24,17 +24,17 @@ function Testimonials() {
       <div className="mx-auto max-w-7xl">
         {/* Heading */}
         <div className="text-center">
-          <h2 className="text-5xl font-bold text-black">
+          <h2 className="text-4xl font-bold text-black md:text-5xl">
             Loved by daily commuters
           </h2>
 
-          <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-[#5f6368]">
+          <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-[#5f6368] md:text-lg">
             Hear from Metro Manila commuters using Komyut AI every day.
           </p>
         </div>
 
         {/* Cards */}
-        <div className="mt-16 grid gap-8 md:grid-cols-3">
+        <div className="mt-16 grid gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
           {testimonials.map((item, index) => (
             <div
               key={index}
