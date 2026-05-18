@@ -5,6 +5,7 @@ import MainLayout from "../layouts/MainLayout";
 import Home from "../pages/Home";
 import About from "../pages/About";
 import FAQ from "../pages/FAQ";
+import MapPage from "../pages/MapPage";
 import PrivacyPolicy from "../pages/PrivacyPolicy";
 import TermsConditions from "../pages/TermsConditions";
 import NotFound from "../pages/NotFound";
@@ -19,6 +20,8 @@ function AppRoutes() {
         <Route path="privacy-policy" element={<PrivacyPolicy />} />
         <Route path="terms-and-conditions" element={<TermsConditions />} />
       </Route>
+
+<Route path="/map" element={<MapPage />} />
 
       <Route path="*" element={<NotFound />} />
     </Routes>
