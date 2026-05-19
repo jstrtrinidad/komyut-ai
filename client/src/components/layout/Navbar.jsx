@@ -52,9 +52,12 @@ function Navbar() {
 
         {/* CTA */}
         <div className="hidden md:block">
-          <button className="rounded-2xl bg-[#f4b400] px-7 py-3 font-semibold text-black shadow-sm transition hover:scale-[1.02] hover:bg-[#ffca28]">
+          <Link
+            to="/map"
+            className="rounded-2xl bg-[#f4b400] px-7 py-3 font-semibold text-black shadow-sm transition hover:scale-[1.02] hover:bg-[#ffca28] inline-block"
+          >
             Get Directions
-          </button>
+          </Link>
         </div>
 
         {/* Mobile Menu Button */}
@@ -91,9 +94,12 @@ function Navbar() {
               FAQ
             </Link>
 
-            <button className="mt-3 rounded-2xl bg-[#f4b400] py-4 font-semibold text-black">
+            <Link
+              to="/map"
+              className="mt-3 rounded-2xl bg-[#f4b400] py-4 font-semibold text-black text-center"
+            >
               Get Directions
-            </button>
+            </Link>
           </div>
         </div>
       )}
