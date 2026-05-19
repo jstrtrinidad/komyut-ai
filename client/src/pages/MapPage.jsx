@@ -1,71 +1,110 @@
-import { useEffect, useRef, useState } from "react";
-import {
-  APIProvider,
-  Map,
-  useMap,
-  useMapsLibrary,
-} from "@vis.gl/react-google-maps";
+import { useEffect, useRef, useState, useCallback } from "react";
+import { Map, useMap, useMapsLibrary } from "@vis.gl/react-google-maps";
 
 const MANILA_CENTER = { lat: 14.5995, lng: 120.9842 };
 
-// ─── Place Autocomplete Input ─────────────────────────────────────────────────
-function PlaceAutocompleteInput({ onPlaceSelect }) {
-  const containerRef = useRef(null);
+// ─── Manual Autocomplete Input ────────────────────────────────────────────────
+// Uses AutocompleteService directly instead of PlaceAutocompleteElement
+// This avoids the shadow DOM / gmp-placeselect event bug in React
+function PlaceInput({ placeholder, onPlaceSelect }) {
+  const [inputValue, setInputValue] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
+  const [showDropdown, setShowDropdown] = useState(false);
+
   const placesLib = useMapsLibrary("places");
-  const onSelectRef = useRef(onPlaceSelect);
+  const debounceRef = useRef(null);
 
-  useEffect(() => {
-    onSelectRef.current = onPlaceSelect;
-  }, [onPlaceSelect]);
-
-  useEffect(() => {
-    if (!placesLib || !containerRef.current) return;
-    containerRef.current.innerHTML = "";
-
-    const element = new placesLib.PlaceAutocompleteElement({
-      componentRestrictions: { country: "ph" },
-    });
-
-    Object.assign(element.style, {
-      width: "100%",
-      border: "none",
-      outline: "none",
-      background: "transparent",
-      fontSize: "12px",
-      fontFamily: "inherit",
-      color: "#000",
-    });
-
-    containerRef.current.appendChild(element);
-
-    const handler = async (e) => {
-      try {
-        const place = e.placePrediction.toPlace();
-        await place.fetchFields({
-          fields: ["displayName", "formattedAddress", "location"],
+  const fetchSuggestions = useCallback(async (value) => {
+    if (!placesLib || value.length < 2) {
+      setSuggestions([]);
+      return;
+    }
+    try {
+      // ✅ Uses new AutocompleteSuggestion API — no legacy service needed
+      const { suggestions: results } =
+        await placesLib.AutocompleteSuggestion.fetchAutocompleteSuggestions({
+          input: value,
+          includedRegionCodes: ["ph"],
+          locationBias: {
+            center: { lat: 14.5995, lng: 120.9842 },
+            radius: 50000,
+          },
         });
-        const result = {
-          name: place.displayName,
-          address: place.formattedAddress,
-          lat: place.location.lat(),
-          lng: place.location.lng(),
-        };
-        console.log("Place selected:", result);
-        onSelectRef.current(result);
-      } catch (err) {
-        console.error("Place select error:", err);
-      }
-    };
-
-    element.addEventListener("gmp-placeselect", handler);
-
-    return () => {
-      element.removeEventListener("gmp-placeselect", handler);
-      if (containerRef.current) containerRef.current.innerHTML = "";
-    };
+      setSuggestions(results ?? []);
+      setShowDropdown(true);
+    } catch (err) {
+      console.error("Autocomplete error:", err);
+      setSuggestions([]);
+    }
   }, [placesLib]);
 
-  return <div ref={containerRef} className="w-full" />;
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    setInputValue(value);
+    clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => fetchSuggestions(value), 300);
+  };
+
+  const handleSelect = async (suggestion) => {
+    try {
+      const place = suggestion.placePrediction.toPlace();
+      await place.fetchFields({
+        fields: ["displayName", "formattedAddress", "location"],
+      });
+      const result = {
+        name: place.displayName,
+        address: place.formattedAddress,
+        lat: place.location.lat(),
+        lng: place.location.lng(),
+      };
+      console.log("✅ Place selected:", result);
+      setInputValue(place.displayName);
+      setSuggestions([]);
+      setShowDropdown(false);
+      onPlaceSelect(result);
+    } catch (err) {
+      console.error("Place details error:", err);
+    }
+  };
+
+  const handleBlur = () => {
+    setTimeout(() => setShowDropdown(false), 150);
+  };
+
+  return (
+    <div className="relative w-full">
+      <input
+        type="text"
+        value={inputValue}
+        onChange={handleInputChange}
+        onBlur={handleBlur}
+        onFocus={() => suggestions.length > 0 && setShowDropdown(true)}
+        placeholder={placeholder}
+        className="w-full bg-transparent text-xs outline-none placeholder-neutral-400 text-black"
+      />
+      {showDropdown && suggestions.length > 0 && (
+        <div className="absolute left-0 top-full mt-1 w-[280px] bg-white border border-neutral-100 rounded-lg shadow-lg z-50 overflow-hidden">
+          {suggestions.map((s, i) => {
+            const pred = s.placePrediction;
+            return (
+              <button
+                key={i}
+                onMouseDown={() => handleSelect(s)}
+                className="w-full text-left px-3 py-2 text-[11px] text-black hover:bg-[#faf7f2] border-b border-neutral-50 last:border-0 transition-colors"
+              >
+                <span className="font-medium block truncate">
+                  {pred?.mainText?.toString() ?? ""}
+                </span>
+                <span className="text-neutral-400 text-[10px] block truncate">
+                  {pred?.secondaryText?.toString() ?? ""}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
 }
 
 // ─── Directions Renderer ──────────────────────────────────────────────────────
@@ -74,7 +113,6 @@ function DirectionsRenderer({ origin, destination, onRouteReady }) {
   const routesLib = useMapsLibrary("routes");
   const rendererRef = useRef(null);
 
-  // Set up renderer once
   useEffect(() => {
     if (!routesLib || !map) return;
     rendererRef.current = new routesLib.DirectionsRenderer({
@@ -91,26 +129,45 @@ function DirectionsRenderer({ origin, destination, onRouteReady }) {
     };
   }, [routesLib, map]);
 
-  // Fetch route when origin/destination change
   useEffect(() => {
     if (!routesLib || !rendererRef.current || !origin || !destination) return;
 
     const service = new routesLib.DirectionsService();
+
+    // Try TRANSIT first (jeepney/bus/MRT routes)
     service.route(
       {
         origin: { lat: origin.lat, lng: origin.lng },
         destination: { lat: destination.lat, lng: destination.lng },
-        travelMode: routesLib.TravelMode.DRIVING,
-        provideRouteAlternatives: false,
+        travelMode: routesLib.TravelMode.TRANSIT,
+        transitOptions: {
+          modes: ["BUS", "RAIL", "SUBWAY", "TRAM"],
+          routingPreference: "FEWER_TRANSFERS",
+        },
       },
       (result, status) => {
-        console.log("Directions status:", status);
+        console.log("Transit status:", status);
         if (status === "OK") {
           rendererRef.current.setDirections(result);
           onRouteReady(result);
         } else {
-          console.error("Directions failed:", status);
-          onRouteReady(null);
+          // Fallback to DRIVING
+          console.warn("No transit route, falling back to driving");
+          service.route(
+            {
+              origin: { lat: origin.lat, lng: origin.lng },
+              destination: { lat: destination.lat, lng: destination.lng },
+              travelMode: routesLib.TravelMode.DRIVING,
+            },
+            (r2, s2) => {
+              if (s2 === "OK") {
+                rendererRef.current.setDirections(r2);
+                onRouteReady(r2);
+              } else {
+                onRouteReady(null);
+              }
+            }
+          );
         }
       }
     );
@@ -119,7 +176,7 @@ function DirectionsRenderer({ origin, destination, onRouteReady }) {
   return null;
 }
 
-// ─── Main Inner Component ─────────────────────────────────────────────────────
+// ─── Main Component ───────────────────────────────────────────────────────────
 function MapPageInner() {
   const map = useMap();
 
@@ -129,12 +186,12 @@ function MapPageInner() {
   const [isSearching, setIsSearching] = useState(false);
   const [showRoute, setShowRoute]     = useState(false);
   const [error, setError]             = useState(null);
+  const [clearKey, setClearKey]       = useState(0);
 
-  const canSearch = origin && destination;
+  const canSearch = !!origin && !!destination;
 
-  // ── handlers ────────────────────────────────────────────────────────────────
   const handleFindRoute = () => {
-    console.log("Find Route clicked — origin:", origin, "dest:", destination);
+    console.log("Find Route:", { origin, destination });
     if (!origin || !destination) return;
     setError(null);
     setRouteResult(null);
@@ -162,13 +219,13 @@ function MapPageInner() {
     setShowRoute(false);
     setIsSearching(false);
     setError(null);
+    setClearKey((k) => k + 1);
     map?.setCenter(MANILA_CENTER);
     map?.setZoom(12);
   };
 
   const leg = routeResult?.routes[0]?.legs[0];
 
-  // ── render ──────────────────────────────────────────────────────────────────
   return (
     <div className="relative w-screen h-screen font-sans antialiased overflow-hidden bg-[#f8f6f1]">
 
@@ -208,15 +265,15 @@ function MapPageInner() {
         {/* Inputs */}
         <div className="p-4 flex flex-col gap-3.5 bg-white border-b border-neutral-200">
           <div className="flex flex-col gap-2.5 relative">
-
-            {/* Connector line */}
             <div className="absolute left-[11px] top-[20px] bottom-[20px] w-0.5 border-l-2 border-dashed border-neutral-200 z-10" />
 
             {/* FROM */}
             <div className="flex items-center gap-2.5 relative z-20">
               <div className="w-1.5 h-1.5 rounded-full bg-[#f4b400] flex-shrink-0 shadow-[0_0_4px_#f4b400]" />
               <div className="w-full p-2 bg-[#f8f6f1] border border-neutral-100 rounded-lg focus-within:border-[#f4b400] transition-colors">
-                <PlaceAutocompleteInput
+                <PlaceInput
+                  key={`from-${clearKey}`}
+                  placeholder="Mula saan?"
                   onPlaceSelect={(place) => {
                     setOrigin(place);
                     setShowRoute(false);
@@ -230,7 +287,9 @@ function MapPageInner() {
             <div className="flex items-center gap-2.5 relative z-20">
               <div className="w-1.5 h-1.5 bg-neutral-400 rounded-full flex-shrink-0" />
               <div className="w-full p-2 bg-[#f8f6f1] border border-neutral-100 rounded-lg focus-within:border-[#f4b400] transition-colors">
-                <PlaceAutocompleteInput
+                <PlaceInput
+                  key={`to-${clearKey}`}
+                  placeholder="Papunta saan?"
                   onPlaceSelect={(place) => {
                     setDestination(place);
                     setShowRoute(false);
@@ -241,12 +300,18 @@ function MapPageInner() {
             </div>
           </div>
 
+          {/* Status indicators */}
+          <div className="text-[9px] text-neutral-400 flex gap-2 justify-center">
+            <span>{origin ? "🟡 " + origin.name : "⚪ From not set"}</span>
+            <span>|</span>
+            <span>{destination ? "🟡 " + destination.name : "⚪ To not set"}</span>
+          </div>
+
           {/* Action row */}
-          <div className="flex items-center justify-between gap-1 mt-0.5">
+          <div className="flex items-center justify-between gap-1">
             <div className="px-2.5 py-1.5 bg-neutral-50 hover:bg-neutral-100 text-neutral-600 text-[10px] font-semibold rounded-md flex items-center gap-1 border border-neutral-200 cursor-pointer transition-colors">
               📅 Depart Now <span className="text-neutral-400 text-[8px]">▼</span>
             </div>
-
             <button
               onClick={handleFindRoute}
               disabled={!canSearch || isSearching}
@@ -261,9 +326,7 @@ function MapPageInner() {
             </button>
           </div>
 
-          {error && (
-            <p className="text-[10px] text-red-500 font-medium">{error}</p>
-          )}
+          {error && <p className="text-[10px] text-red-500 font-medium">{error}</p>}
         </div>
 
         {/* Results */}
@@ -279,7 +342,7 @@ function MapPageInner() {
             </div>
           )}
 
-          {/* Selected but not searched */}
+          {/* Places picked, not searched yet */}
           {(origin || destination) && !isSearching && !routeResult && (
             <div className="flex flex-col gap-2">
               {origin && (
@@ -312,11 +375,9 @@ function MapPageInner() {
             </div>
           )}
 
-          {/* Route found */}
+          {/* Route result */}
           {routeResult && leg && (
             <div className="flex flex-col gap-3">
-
-              {/* Summary */}
               <div className="bg-white rounded-xl border border-neutral-100 overflow-hidden">
                 <div className="px-3 py-2 bg-[#f4b400]">
                   <p className="text-[10px] font-black text-black tracking-wider uppercase">Route Found</p>
@@ -339,7 +400,6 @@ function MapPageInner() {
                 </div>
               </div>
 
-              {/* From → To */}
               <div className="bg-white rounded-xl border border-neutral-100 p-3 flex flex-col gap-2">
                 <div>
                   <p className="text-[9px] font-bold text-[#f4b400] uppercase tracking-wider mb-0.5">From</p>
@@ -352,7 +412,6 @@ function MapPageInner() {
                 </div>
               </div>
 
-              {/* Turn by turn */}
               {leg.steps?.length > 0 && (
                 <div className="bg-white rounded-xl border border-neutral-100 overflow-hidden">
                   <div className="px-3 py-2 border-b border-neutral-100">
@@ -405,7 +464,5 @@ function MapPageInner() {
     </div>
   );
 }
-
-
 
 export default MapPageInner;
