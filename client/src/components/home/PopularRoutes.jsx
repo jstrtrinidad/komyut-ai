@@ -55,9 +55,7 @@ function PopularRoutes() {
                   nearby stations around {place}.
                 </p>
 
-                <button className="mt-8 font-semibold text-[#f4b400]">
-                  Explore destination →
-                </button>
+             
               </div>
             </div>
           ))}

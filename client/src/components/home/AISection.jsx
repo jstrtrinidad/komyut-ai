@@ -1,29 +1,13 @@
-import {
-  Brain,
-  Clock3,
-  Users,
-  Train,
-} from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { Brain, Clock3, Users, Train } from "lucide-react";
 
 function AISection() {
+  const navigate = useNavigate(); // Add this
+
   const insights = [
-    {
-      icon: Clock3,
-      title: "Best Departure Time",
-      value: "7:15 AM",
-    },
-
-    {
-      icon: Users,
-      title: "Crowd Prediction",
-      value: "Moderate Traffic",
-    },
-
-    {
-      icon: Train,
-      title: "Suggested Transport",
-      value: "MRT + Walk",
-    },
+    { icon: Clock3, title: "Best Departure Time", value: "7:15 AM" },
+    { icon: Users, title: "Estimated Fare", value: "Bus: ₱34 - Train: ₱26" },
+    { icon: Train, title: "Primary Transport", value: "LRT Line 1 -> 13 Buendia - BGC" },
   ];
 
   return (
@@ -52,7 +36,10 @@ function AISection() {
           </p>
 
           {/* CTA */}
-          <button className="mt-10 rounded-2xl bg-[#f4b400] px-8 py-4 text-lg font-semibold text-black transition hover:bg-[#ffca28]">
+          <button
+            onClick={() => navigate("/map")} // <-- Redirect to MapPage
+            className="mt-10 rounded-2xl bg-[#f4b400] px-8 py-4 text-lg font-semibold text-black transition hover:bg-[#ffca28]"
+          >
             Explore AI Features
           </button>
         </div>
@@ -61,7 +48,6 @@ function AISection() {
         <div className="space-y-5">
           {insights.map((item, index) => {
             const Icon = item.icon;
-
             return (
               <div
                 key={index}
@@ -69,20 +55,11 @@ function AISection() {
               >
                 <div className="flex items-start justify-between">
                   <div>
-                    <p className="text-sm font-medium text-[#9aa0a6]">
-                      {item.title}
-                    </p>
-
-                    <h3 className="mt-4 text-4xl font-bold text-black">
-                      {item.value}
-                    </h3>
+                    <p className="text-sm font-medium text-[#9aa0a6]">{item.title}</p>
+                    <h3 className="mt-4 text-4xl font-bold text-black">{item.value}</h3>
                   </div>
-
                   <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#fff4d6]">
-                    <Icon
-                      size={24}
-                      className="text-[#f4b400]"
-                    />
+                    <Icon size={24} className="text-[#f4b400]" />
                   </div>
                 </div>
               </div>
