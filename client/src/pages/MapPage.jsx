@@ -1,55 +1,28 @@
 import { useEffect, useRef, useState, useCallback } from "react";
+import { useLocation } from "react-router-dom";
 import { Map, useMap, useMapsLibrary } from "@vis.gl/react-google-maps";
+
+import Navbar from "../components/layout/Navbar";
 
 const MANILA_CENTER = { lat: 14.5995, lng: 120.9842 };
 
 // ─── SVG Icons para sa AI Cards ───────────────────────────────────────────────
 const ClockIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2.5"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
     <circle cx="12" cy="12" r="10"></circle>
     <polyline points="12 6 12 12 16 14"></polyline>
   </svg>
 );
 
 const WalletIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2.5"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
     <rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect>
     <line x1="12" y1="20" x2="12" y2="4"></line>
   </svg>
 );
 
 const TransportIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2.5"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
     <rect x="4" y="3" width="16" height="16" rx="2" ry="2"></rect>
     <path d="M4 11h16"></path>
     <path d="M12 3v8"></path>
@@ -61,36 +34,19 @@ const TransportIcon = () => (
 );
 
 const MinimizeIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2.5"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
     <polyline points="4 14 12 22 20 14"></polyline>
     <polyline points="4 2 12 10 20 2"></polyline>
   </svg>
 );
 
-// ─── AI Insight Row Component (Pinagana ang text wrapping para sa fare list) ───
+// ─── AI Insight Row Component ───
 function AiInsightRow({ label, value, icon }) {
   return (
     <div className="flex items-center justify-between p-2.5 bg-white bg-opacity-70 rounded-xl border border-neutral-100 shadow-sm">
       <div className="flex flex-col gap-0.5 flex-grow min-w-0">
-        <span className="text-[10px] text-neutral-400 font-bold uppercase tracking-wider">
-          {label}
-        </span>
-        <span
-          className="text-[12px] font-black text-black leading-tight break-words pr-1"
-          title={value}
-        >
-          {value}
-        </span>
+        <span className="text-[10px] text-neutral-400 font-bold uppercase tracking-wider">{label}</span>
+        <span className="text-[12px] font-black text-black leading-tight break-words pr-1" title={value}>{value}</span>
       </div>
       <div className="w-8 h-8 rounded-xl bg-[#fff8e6] text-[#f4b400] flex items-center justify-center flex-shrink-0 ml-2">
         {icon}
@@ -99,14 +55,18 @@ function AiInsightRow({ label, value, icon }) {
   );
 }
 
-// ─── Manual Autocomplete Input ────────────────────────────────────────────────
-function PlaceInput({ placeholder, onPlaceSelect }) {
-  const [inputValue, setInputValue] = useState("");
+// ─── Manual Autocomplete Input ───
+function PlaceInput({ placeholder, onPlaceSelect, initialValue = "" }) {
+  const [inputValue, setInputValue] = useState(initialValue);
   const [suggestions, setSuggestions] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
 
   const placesLib = useMapsLibrary("places");
   const debounceRef = useRef(null);
+
+  useEffect(() => {
+    setInputValue(initialValue);
+  }, [initialValue]);
 
   const fetchSuggestions = useCallback(
     async (value) => {
@@ -123,7 +83,7 @@ function PlaceInput({ placeholder, onPlaceSelect }) {
               north: 14.7877,
               south: 14.3466,
               east: 121.1338,
-              west: 120.93,
+              west: 120.9300,
             },
           });
         setSuggestions(results ?? []);
@@ -197,7 +157,7 @@ function PlaceInput({ placeholder, onPlaceSelect }) {
   );
 }
 
-// ─── Dynamic Multi-Route Layer Renderer ───────────────────────────────────────
+// ─── Dynamic Multi-Route Layer Renderer ───
 function MultiRouteRenderer({ directionsResult, selectedRouteIndex }) {
   const map = useMap();
   const routesLib = useMapsLibrary("routes");
@@ -211,7 +171,7 @@ function MultiRouteRenderer({ directionsResult, selectedRouteIndex }) {
 
     renderersRef.current = directionsResult.routes.map((_, idx) => {
       const isSelected = idx === selectedRouteIndex;
-
+     
       const renderer = new routesLib.DirectionsRenderer({
         map,
         directions: directionsResult,
@@ -219,13 +179,13 @@ function MultiRouteRenderer({ directionsResult, selectedRouteIndex }) {
         suppressMarkers: !isSelected,
         preserveViewport: true,
         polylineOptions: {
-          strokeColor: isSelected ? "#f4b400" : "#fde047", // Matingkad na dilaw vs Light soft yellow
+          strokeColor: isSelected ? "#f4b400" : "#fde047",
           strokeWeight: isSelected ? 6 : 4.5,
           strokeOpacity: isSelected ? 1.0 : 0.65,
           zIndex: isSelected ? 100 : 10,
         },
       });
-
+     
       return renderer;
     });
 
@@ -238,10 +198,34 @@ function MultiRouteRenderer({ directionsResult, selectedRouteIndex }) {
   return null;
 }
 
+// ─── Traffic Layer Component ───
+function TrafficLayerComponent({ show }) {
+  const map = useMap();
+  const trafficLayerRef = useRef(null);
+
+  useEffect(() => {
+    if (!map) return;
+   
+    if (!trafficLayerRef.current) {
+      trafficLayerRef.current = new window.google.maps.TrafficLayer();
+    }
+   
+    if (show) {
+      trafficLayerRef.current.setMap(map);
+    } else {
+      trafficLayerRef.current.setMap(null);
+    }
+  }, [map, show]);
+
+  return null;
+}
+
 // ─── Main Component ───────────────────────────────────────────────────────────
-function MapPageInner() {
+function MapPage() {
   const map = useMap();
   const routesLib = useMapsLibrary("routes");
+  const geocodingLib = useMapsLibrary("geocoding");
+  const location = useLocation();
   const audioRef = useRef(null);
   const chatContainerRef = useRef(null);
   const lastAutoPrompt = useRef("");
@@ -250,13 +234,16 @@ function MapPageInner() {
   const [origin, setOrigin] = useState(null);
   const [destination, setDestination] = useState(null);
   const [arrivalTime, setArrivalTime] = useState("");
+  const [initialOriginText, setInitialOriginText] = useState("");
+  const [initialDestinationText, setInitialDestinationText] = useState("");
+  const hasAutoRouted = useRef(false);
 
   const [routeResult, setRouteResult] = useState(null);
   const [selectedRouteIndex, setSelectedRouteIndex] = useState(0);
   const [aiInsights, setAiInsights] = useState(null);
-
   const [isSearching, setIsSearching] = useState(false);
   const [showRoute, setShowRoute] = useState(false);
+  const [showTraffic, setShowTraffic] = useState(false);
   const [clearKey, setClearKey] = useState(0);
 
   // Chat & UI States
@@ -265,192 +252,14 @@ function MapPageInner() {
   const [isAiLoading, setIsAiLoading] = useState(false);
   const [currentlyPlayingId, setCurrentlyPlayingId] = useState(null);
   const [isPaused, setIsPaused] = useState(false);
-  const [isAiMinimized, setIsAiMinimized] = useState(false);
+  const [isAiMinimized, setIsAiMinimized] = useState(() =>
+    typeof window !== "undefined" ? window.innerWidth < 768 : false
+  );
 
   const canSearch = !!origin && !!destination;
 
-  useEffect(() => {
-    if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTop =
-        chatContainerRef.current.scrollHeight;
-    }
-  }, [chatHistory, isAiLoading, isAiMinimized]);
-
-  // ── Dynamic Insights Extraction with Fare Split Breakdown ──
-  useEffect(() => {
-    if (!routeResult) {
-      setAiInsights(null);
-      return;
-    }
-
-    const route = routeResult.routes[selectedRouteIndex];
-    const leg = route?.legs[0];
-    if (!leg) return;
-
-    // 1. Compute Departure Time
-    let bestTime = "ASAP";
-    if (leg.departure_time) {
-      bestTime = leg.departure_time.text;
-    } else {
-      const durationInSeconds = leg.duration?.value || 0;
-      let targetTime = new Date();
-      if (arrivalTime) {
-        const [hours, minutes] = arrivalTime.split(":");
-        targetTime.setHours(parseInt(hours, 10), parseInt(minutes, 10), 0, 0);
-        const depTime = new Date(
-          targetTime.getTime() - durationInSeconds * 1000 - 10 * 60000,
-        );
-        bestTime = depTime.toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        });
-      }
-    }
-
-    // 2. Transport Modes Parsing & Fare Breakdown
-    const transitSteps = leg.steps.filter(
-      (step) => step.travel_mode === "TRANSIT",
-    );
-    let transportMode = "Lakad Lamang";
-    let estimatedFareText = "₱0.00 (Walk)";
-
-    if (transitSteps.length > 0) {
-      // Isalin ang mga transit lines para sa summary display
-      const lines = transitSteps.map((step) => {
-        return (
-          step.transit?.line?.short_name ||
-          step.transit?.line?.name ||
-          "Transit"
-        );
-      });
-      transportMode =
-        lines.slice(0, 3).join(" ➔ ") + (lines.length > 3 ? "..." : "");
-
-      // Dynamic Itemized Fare Calculations base sa Manila Matrix
-      let fareBreakdown = {};
-
-      transitSteps.forEach((step) => {
-        const type = step.transit?.line?.vehicle?.type || "";
-        const name = (step.transit?.line?.name || "").toUpperCase();
-        const shortName = (step.transit?.line?.short_name || "").toUpperCase();
-        const distanceKm = (step.distance?.value || 0) / 1000;
-
-        let modeKey = "Jeep/UV";
-        let stepFare = 15;
-
-        if (
-          type === "BUS" ||
-          name.includes("BUS") ||
-          shortName.includes("BUS")
-        ) {
-          modeKey = "Bus";
-          stepFare = 15 + Math.round(distanceKm * 2.1);
-        } else if (
-          type === "RAIL" ||
-          type === "SUBWAY" ||
-          type === "HEAVY_RAIL" ||
-          name.includes("LRT") ||
-          name.includes("MRT") ||
-          name.includes("METRO") ||
-          shortName.includes("LRT") ||
-          shortName.includes("MRT")
-        ) {
-          if (name.includes("LRT 1") || shortName.includes("L1"))
-            modeKey = "LRT-1";
-          else if (name.includes("LRT 2") || shortName.includes("L2"))
-            modeKey = "LRT-2";
-          else if (name.includes("MRT 3") || shortName.includes("M3"))
-            modeKey = "MRT-3";
-          else modeKey = "Tren";
-
-          stepFare = 15 + Math.round(distanceKm * 1.6);
-        } else {
-          modeKey = "Jeep/UV";
-          stepFare = 13 + Math.round(distanceKm * 1.8);
-        }
-
-        if (!fareBreakdown[modeKey]) {
-          fareBreakdown[modeKey] = 0;
-        }
-        fareBreakdown[modeKey] += stepFare;
-      });
-
-      // Pagsamahin ang nakuhang types para sa malinis na presentation line
-      estimatedFareText = Object.entries(fareBreakdown)
-        .map(([mode, fare]) => `${mode}: ₱${fare}`)
-        .join(" • ");
-    } else if (route.summary) {
-      transportMode = route.summary;
-    }
-
-    setAiInsights({
-      bestDeparture: bestTime,
-      fare: estimatedFareText,
-      transport: transportMode,
-    });
-  }, [routeResult, arrivalTime, selectedRouteIndex]);
-
-  // ─── Audio Handlers ──────────────────────────────
-  const playAudio = (url, id, text) => {
-    stopAudio();
-    if (url) {
-      const audio = new Audio(url);
-      audioRef.current = audio;
-      audio.onplay = () => {
-        setCurrentlyPlayingId(id);
-        setIsPaused(false);
-      };
-      audio.onpause = () => setIsPaused(true);
-      audio.onended = () => {
-        setCurrentlyPlayingId(null);
-        setIsPaused(false);
-      };
-      audio.play().catch((e) => console.error("Playback failed:", e));
-    } else if ("speechSynthesis" in window && text) {
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.rate = 1.0;
-      utterance.onstart = () => {
-        setCurrentlyPlayingId(id);
-        setIsPaused(false);
-      };
-      utterance.onpause = () => setIsPaused(true);
-      utterance.onresume = () => setIsPaused(false);
-      utterance.onend = () => {
-        setCurrentlyPlayingId(null);
-        setIsPaused(false);
-      };
-      utterance.onerror = () => {
-        setCurrentlyPlayingId(null);
-        setIsPaused(false);
-      };
-      window.speechSynthesis.speak(utterance);
-    }
-  };
-
-  const toggleAudio = () => {
-    if (audioRef.current) {
-      audioRef.current.paused
-        ? audioRef.current.play()
-        : audioRef.current.pause();
-    } else if ("speechSynthesis" in window) {
-      if (window.speechSynthesis.paused) window.speechSynthesis.resume();
-      else if (window.speechSynthesis.speaking) window.speechSynthesis.pause();
-    }
-  };
-
-  const stopAudio = () => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0;
-      audioRef.current = null;
-    }
-    if ("speechSynthesis" in window) window.speechSynthesis.cancel();
-    setCurrentlyPlayingId(null);
-    setIsPaused(false);
-  };
-
-  // ─── AI Chat Fetch Handler ────────────────────────────────────────────────
-  const handleAskAI = async (customPrompt, contextRoute = null) => {
+  // ─── AI Chat Fetch Handler ───
+  const handleAskAI = useCallback(async (customPrompt, contextRoute = null) => {
     if (!customPrompt.trim()) return;
 
     setChatHistory((prev) => [
@@ -479,6 +288,7 @@ function MapPageInner() {
     }
 
     try {
+<<<<<<< HEAD
       const response = await fetch(
         "http://localhost:5000/api/ai/commute-info",
         {
@@ -492,6 +302,18 @@ function MapPageInner() {
           }),
         },
       );
+=======
+      const response = await fetch("http://localhost:5000/api/ai/commute-info", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          prompt: customPrompt,
+          origin: origin?.name || origin?.address,
+          destination: destination?.name || destination?.address,
+          routeContext: routeContextText,
+        }),
+      });
+>>>>>>> 72892e1adf728e51105c822c134a07223aebfa6b
       const data = await response.json();
 
       let audioUrl = null;
@@ -526,10 +348,10 @@ function MapPageInner() {
     } finally {
       setIsAiLoading(false);
     }
-  };
+  }, [origin, destination]);
 
   // ─── Fetch Directions ───
-  const handleFindRoute = () => {
+  const handleFindRoute = useCallback(() => {
     if (!canSearch || !routesLib) return;
     setRouteResult(null);
     setSelectedRouteIndex(0);
@@ -540,10 +362,7 @@ function MapPageInner() {
 
     const service = new routesLib.DirectionsService();
 
-    let transitOpts = {
-      modes: ["BUS", "RAIL", "SUBWAY", "TRAM"],
-      routingPreference: "FEWER_TRANSFERS",
-    };
+    let transitOpts = { modes: ["BUS", "RAIL", "SUBWAY", "TRAM"], routingPreference: "FEWER_TRANSFERS" };
     if (arrivalTime) {
       const targetTime = new Date();
       const [hours, minutes] = arrivalTime.split(":");
@@ -578,210 +397,197 @@ function MapPageInner() {
           console.warn("Transit route request failed due to " + status);
           setShowRoute(false);
         }
-      },
+      }
     );
+  }, [canSearch, routesLib, arrivalTime, origin, destination, map, handleAskAI]);
+
+  // ─── Auto-fill from location state ───
+  useEffect(() => {
+    const state = location.state;
+    if (state?.originText && state?.destinationText && geocodingLib && routesLib && !hasAutoRouted.current) {
+      setInitialOriginText(state.originText);
+      setInitialDestinationText(state.destinationText);
+
+      const geocoder = new geocodingLib.Geocoder();
+
+      const geocode = (text) => {
+        return new Promise((resolve) => {
+          geocoder.geocode(
+            { address: text, componentRestrictions: { country: "PH" } },
+            (results, status) => {
+              if (status === "OK" && results[0]) {
+                const loc = results[0].geometry.location;
+                resolve({
+                  name: text,
+                  address: results[0].formatted_address,
+                  lat: loc.lat(),
+                  lng: loc.lng(),
+                });
+              } else {
+                console.warn(`Geocode failed for ${text}: ${status}`);
+                resolve(null);
+              }
+            }
+          );
+        });
+      };
+
+      Promise.all([geocode(state.originText), geocode(state.destinationText)]).then(
+        ([o, d]) => {
+          if (o && d) {
+            setOrigin(o);
+            setDestination(d);
+            hasAutoRouted.current = true;
+          }
+        }
+      );
+    }
+  }, [location.state, geocodingLib, routesLib]);
+
+  // ─── Auto-route trigger ───
+  useEffect(() => {
+    if (hasAutoRouted.current && origin && destination && !routeResult && !isSearching) {
+      handleFindRoute();
+    }
+  }, [origin, destination, routeResult, isSearching, handleFindRoute]);
+
+  // ─── Insights Extraction ───
+  useEffect(() => {
+    if (!routeResult) {
+      setAiInsights(null);
+      return;
+    }
+
+    const route = routeResult.routes[selectedRouteIndex];
+    const leg = route?.legs[0];
+    if (!leg) return;
+
+    let bestTime = "ASAP";
+    if (leg.departure_time) {
+      bestTime = leg.departure_time.text;
+    } else {
+      const durationInSeconds = leg.duration?.value || 0;
+      let targetTime = new Date();
+      if (arrivalTime) {
+        const [hours, minutes] = arrivalTime.split(":");
+        targetTime.setHours(parseInt(hours, 10), parseInt(minutes, 10), 0, 0);
+        const depTime = new Date(targetTime.getTime() - (durationInSeconds * 1000) - (10 * 60000));
+        bestTime = depTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      }
+    }
+
+    const transitSteps = leg.steps.filter(step => step.travel_mode === "TRANSIT");
+    let transportMode = "Lakad Lamang";
+    let estimatedFareText = "₱0.00 (Walk)";
+
+    if (transitSteps.length > 0) {
+      const lines = transitSteps.map(step => {
+        return step.transit?.line?.short_name || step.transit?.line?.name || "Transit";
+      });
+      transportMode = lines.slice(0, 3).join(" ➔ ") + (lines.length > 3 ? "..." : "");
+
+      let fareBreakdown = {};
+      transitSteps.forEach(step => {
+        const type = step.transit?.line?.vehicle?.type || "";
+        const name = (step.transit?.line?.name || "").toUpperCase();
+        const shortName = (step.transit?.line?.short_name || "").toUpperCase();
+        const distanceKm = (step.distance?.value || 0) / 1000;
+
+        let modeKey = "Jeep/UV";
+        let stepFare = 15;
+
+        if (type === "BUS" || name.includes("BUS") || shortName.includes("BUS")) {
+          modeKey = "Bus";
+          stepFare = 15 + Math.round(distanceKm * 2.1);
+        } else if (
+          type === "RAIL" || type === "SUBWAY" || type === "HEAVY_RAIL" ||
+          name.includes("LRT") || name.includes("MRT") || name.includes("METRO") ||
+          shortName.includes("LRT") || shortName.includes("MRT")
+        ) {
+          if (name.includes("LRT 1") || shortName.includes("L1")) modeKey = "LRT-1";
+          else if (name.includes("LRT 2") || shortName.includes("L2")) modeKey = "LRT-2";
+          else if (name.includes("MRT 3") || shortName.includes("M3")) modeKey = "MRT-3";
+          else modeKey = "Tren";
+          stepFare = 15 + Math.round(distanceKm * 1.6);
+        } else {
+          modeKey = "Jeep/UV";
+          stepFare = 13 + Math.round(distanceKm * 1.8);
+        }
+
+        if (!fareBreakdown[modeKey]) fareBreakdown[modeKey] = 0;
+        fareBreakdown[modeKey] += stepFare;
+      });
+
+      estimatedFareText = Object.entries(fareBreakdown)
+        .map(([mode, fare]) => `${mode}: ₱${fare}`)
+        .join(" • ");
+    } else if (route.summary) {
+      transportMode = route.summary;
+    }
+
+    setAiInsights({
+      bestDeparture: bestTime,
+      fare: estimatedFareText,
+      transport: transportMode
+    });
+  }, [routeResult, arrivalTime, selectedRouteIndex]);
+
+  // ─── Scroll Chat ───
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
+  }, [chatHistory, isAiLoading, isAiMinimized]);
+
+  // ─── Audio Handlers ───
+  const playAudio = (url, id, text) => {
+    stopAudio();
+    if (url) {
+      const audio = new Audio(url);
+      audioRef.current = audio;
+      audio.onplay = () => { setCurrentlyPlayingId(id); setIsPaused(false); };
+      audio.onpause = () => setIsPaused(true);
+      audio.onended = () => { setCurrentlyPlayingId(null); setIsPaused(false); };
+      audio.play().catch((e) => console.error("Playback failed:", e));
+    } else if ("speechSynthesis" in window && text) {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = 1.0;
+      utterance.onstart = () => { setCurrentlyPlayingId(id); setIsPaused(false); };
+      utterance.onpause = () => setIsPaused(true);
+      utterance.onresume = () => setIsPaused(false);
+      utterance.onend = () => { setCurrentlyPlayingId(null); setIsPaused(false); };
+      utterance.onerror = () => { setCurrentlyPlayingId(null); setIsPaused(false); };
+      window.speechSynthesis.speak(utterance);
+    }
+  };
+
+  const toggleAudio = () => {
+    if (audioRef.current) {
+      audioRef.current.paused ? audioRef.current.play() : audioRef.current.pause();
+    } else if ("speechSynthesis" in window) {
+      if (window.speechSynthesis.paused) window.speechSynthesis.resume();
+      else if (window.speechSynthesis.speaking) window.speechSynthesis.pause();
+    }
+  };
+
+  const stopAudio = () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+      audioRef.current = null;
+    }
+    if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+    setCurrentlyPlayingId(null);
+    setIsPaused(false);
   };
 
   return (
-    <div className="relative w-screen h-screen flex bg-neutral-100 font-sans overflow-hidden">
-      {/* ─── LEFT SIDEBAR: ROUTE CONTROLS ─── */}
-      <div className="relative z-10 w-[360px] flex flex-col bg-white shadow-2xl border-r border-[#ece7dc] h-full flex-shrink-0">
-        {/* Header */}
-        <div className="p-5 flex items-center justify-between border-b border-[#ece7dc]">
-          <div className="flex items-center gap-2.5">
-            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-black text-[#f4b400] text-sm font-black shadow-md">
-              ⌘
-            </div>
-            <span className="text-xl font-black tracking-tight text-black">
-              komyut <span className="text-[#f4b400]">AI</span>
-            </span>
-          </div>
-          <button
-            onClick={() => {
-              setOrigin(null);
-              setDestination(null);
-              setArrivalTime("");
-              setRouteResult(null);
-              setShowRoute(false);
-              setChatHistory([]);
-              setClearKey((k) => k + 1);
-              stopAudio();
-            }}
-            className="text-[11px] font-bold text-neutral-400 hover:text-black transition-colors px-2 py-1 rounded-md hover:bg-neutral-100"
-          >
-            Reset
-          </button>
-        </div>
+    <div className="flex flex-col w-screen h-screen bg-[#faf7f2] font-sans overflow-hidden">
+      <Navbar />
 
-        {/* Inputs Panel */}
-        <div className="p-5 flex flex-col gap-4 border-b border-[#ece7dc]">
-          <div className="relative flex flex-col gap-3">
-            <div className="absolute left-[15px] top-[28px] bottom-[28px] w-0.5 border-l-2 border-dashed border-[#ece7dc] z-10" />
-
-            {/* Origin */}
-            <div className="flex items-center gap-3 relative z-20">
-              <div className="w-3.5 h-3.5 rounded-full bg-[#f4b400] flex-shrink-0 shadow-[0_0_8px_#f4b400]" />
-              <div className="w-full px-4 py-2 bg-[#f8f6f1] border border-[#ece7dc] rounded-xl focus-within:border-[#f4b400] focus-within:bg-white transition-all">
-                <PlaceInput
-                  key={`from-${clearKey}`}
-                  placeholder="Mula saan?"
-                  onPlaceSelect={(p) => {
-                    setOrigin(p);
-                    setShowRoute(false);
-                  }}
-                />
-              </div>
-            </div>
-
-            {/* Destination */}
-            <div className="flex items-center gap-3 relative z-20">
-              <div className="w-3.5 h-3.5 bg-black rounded-full flex-shrink-0" />
-              <div className="w-full px-4 py-2 bg-[#f8f6f1] border border-[#ece7dc] rounded-xl focus-within:border-[#f4b400] focus-within:bg-white transition-all">
-                <PlaceInput
-                  key={`to-${clearKey}`}
-                  placeholder="Papunta saan?"
-                  onPlaceSelect={(p) => {
-                    setDestination(p);
-                    setShowRoute(false);
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Arrive By & Search */}
-          <div className="flex items-center justify-between gap-3 mt-1">
-            <div className="flex items-center gap-2 px-4 py-2 bg-[#f8f6f1] border border-[#ece7dc] rounded-xl focus-within:border-[#f4b400] transition-colors flex-grow">
-              <span className="text-[11px] font-bold text-neutral-400 whitespace-nowrap">
-                🏁 Arrive By
-              </span>
-              <input
-                type="time"
-                value={arrivalTime}
-                onChange={(e) => setArrivalTime(e.target.value)}
-                className="bg-transparent outline-none text-[13px] font-black text-black flex-grow w-full cursor-pointer"
-              />
-            </div>
-
-            <button
-              onClick={handleFindRoute}
-              disabled={!canSearch || isSearching}
-              className="px-5 py-2.5 bg-black hover:bg-neutral-800 text-white text-[12px] font-bold rounded-xl transition-all shadow-md flex-shrink-0 disabled:opacity-50"
-            >
-              {isSearching ? "..." : "Search"}
-            </button>
-          </div>
-        </div>
-
-        {/* Route Suggestions List */}
-        <div className="flex-grow overflow-y-auto bg-white custom-scrollbar">
-          {isSearching && (
-            <div className="p-10 flex flex-col items-center justify-center gap-2 text-center">
-              <div className="w-6 h-6 border-2 border-[#f4b400] border-t-transparent rounded-full animate-spin" />
-              <p className="text-[12px] text-neutral-400 font-bold">
-                Naghahanap ng best commute option...
-              </p>
-            </div>
-          )}
-
-          {!routeResult && !isSearching && (
-            <div className="h-full flex flex-col items-center justify-center p-6 text-center opacity-50">
-              <span className="text-2xl mb-2">🚌</span>
-              <p className="text-[11px] font-bold text-neutral-500">
-                I-type ang lokasyon para makita
-                <br />
-                ang mga suhestiyong ruta.
-              </p>
-            </div>
-          )}
-
-          {routeResult && (
-            <div className="flex flex-col divide-y divide-neutral-100">
-              <div className="p-4 bg-[#f8f6f1] border-b border-[#ece7dc]">
-                <p className="text-[10px] font-black text-neutral-400 uppercase tracking-wider">
-                  Suggested Commute Routes
-                </p>
-              </div>
-              {routeResult.routes.map((route, idx) => {
-                const isSelected = selectedRouteIndex === idx;
-                return (
-                  <div key={idx} className="flex flex-col">
-                    <button
-                      onClick={() => setSelectedRouteIndex(idx)}
-                      className={`relative flex items-start justify-between p-4 border-l-4 text-left transition-all ${
-                        isSelected
-                          ? "border-l-[#f4b400] bg-[#fffcf5]"
-                          : "border-l-transparent bg-white hover:bg-neutral-50"
-                      }`}
-                    >
-                      <div className="flex flex-col gap-0.5">
-                        {idx === 0 && (
-                          <span className="text-[9px] font-black text-[#f4b400] tracking-wider mb-1 uppercase flex items-center gap-1">
-                            ⭐ Best Route
-                          </span>
-                        )}
-                        <span className="text-[14px] font-black text-black tracking-tight">
-                          {route.legs[0].duration.text}
-                        </span>
-                        <span className="text-[11px] font-semibold text-neutral-500 truncate max-w-[200px]">
-                          via {route.summary || "Commute Line"}
-                        </span>
-                      </div>
-                      <span className="text-[11px] font-bold text-neutral-400 bg-neutral-100 px-2 py-0.5 rounded-md mt-auto mb-auto">
-                        {route.legs[0].distance.text}
-                      </span>
-                    </button>
-
-                    {/* DYNAMIC ROUTE DETAILS */}
-                    {isSelected && (
-                      <div className="px-5 pb-4 pt-1 bg-[#fffcf5]">
-                        <div className="flex flex-col gap-3 pl-3 border-l-2 border-dashed border-[#f4b400] mt-1 relative">
-                          <div className="absolute -left-[5px] top-0 w-2 h-2 rounded-full bg-[#f4b400]" />
-                          {route.legs[0].steps.map((step, sIdx) => (
-                            <div
-                              key={sIdx}
-                              className="flex items-start gap-2.5"
-                            >
-                              <span className="text-[13px] mt-0.5 flex-shrink-0">
-                                {step.travel_mode === "TRANSIT" ? "🚌" : "🚶‍♂️"}
-                              </span>
-                              <div className="flex flex-col">
-                                <span
-                                  className="text-[11px] text-neutral-700 font-medium leading-relaxed"
-                                  dangerouslySetInnerHTML={{
-                                    __html: step.instructions,
-                                  }}
-                                />
-                                {step.transit && (
-                                  <span className="text-[10px] text-neutral-400 font-semibold mt-0.5">
-                                    {step.transit.line?.short_name ||
-                                      step.transit.line?.name}{" "}
-                                    • {step.transit.num_stops} stops
-                                  </span>
-                                )}
-                              </div>
-                            </div>
-                          ))}
-                          <div className="absolute -left-[5px] -bottom-[2px] w-2 h-2 rounded-full bg-black" />
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* ─── CENTER: GOOGLE MAPS PANEL ─── */}
-      <div className="relative flex-grow h-full z-0">
-        <Map
-          defaultCenter={MANILA_CENTER}
-          defaultZoom={12}
-          disableDefaultUI
-          style={{ width: "100%", height: "100%" }}
-        >
+      <div className="relative flex-grow w-full h-[calc(100vh-72px)] overflow-hidden">
+        <Map defaultCenter={MANILA_CENTER} defaultZoom={12} disableDefaultUI style={{ width: "100%", height: "100%" }}>
+          <TrafficLayerComponent show={showTraffic} />
           {showRoute && routeResult && (
             <MultiRouteRenderer
               directionsResult={routeResult}
@@ -790,194 +596,245 @@ function MapPageInner() {
           )}
         </Map>
 
-        {/* Zoom Controls */}
-        <div className="absolute bottom-6 left-6 z-20 flex flex-col gap-1 shadow-md rounded-lg overflow-hidden border border-neutral-200">
-          <button
-            onClick={() => map?.setZoom((map.getZoom() ?? 12) + 1)}
-            className="w-9 h-9 bg-white hover:bg-neutral-50 text-black font-black text-md flex items-center justify-center"
-          >
-            +
-          </button>
-          <button
-            onClick={() => map?.setZoom((map.getZoom() ?? 12) - 1)}
-            className="w-9 h-9 bg-white hover:bg-neutral-50 text-black font-black text-md border-t border-neutral-100 flex items-center justify-center"
-          >
-            −
-          </button>
-        </div>
-      </div>
+        <div className="absolute top-4 left-4 right-4 z-10 w-[calc(100%-2rem)] md:w-[360px] md:top-6 md:left-6 md:right-auto flex flex-col bg-white shadow-2xl border border-[#ece7dc] rounded-[24px] max-h-[50vh] md:max-h-[calc(100%-120px)] overflow-hidden pointer-events-auto">
+          <div className="p-4 flex items-center justify-between border-b border-[#ece7dc] bg-[#faf7f2]">
+            <span className="text-[12px] font-black uppercase tracking-widest text-black">Route Search</span>
+            <button
+              onClick={() => {
+                setOrigin(null); setDestination(null); setArrivalTime("");
+                setRouteResult(null); setShowRoute(false); setChatHistory([]);
+                setClearKey((k) => k + 1); stopAudio();
+              }}
+              className="text-[11px] font-bold text-neutral-400 hover:text-black transition-colors px-2 py-1 rounded-md hover:bg-white"
+            >
+              Reset
+            </button>
+          </div>
 
-      {/* ─── RIGHT FLOATING PANEL: AI INFERENCES & CHAT ─── */}
-      {routeResult && (
-        <div className="absolute top-6 right-6 bottom-6 z-10 flex flex-col gap-4 pointer-events-none items-end">
-          {/* Minimize/Maximize Controller Button */}
-          <button
-            onClick={() => setIsAiMinimized(!isAiMinimized)}
-            className="pointer-events-auto bg-white bg-opacity-95 backdrop-blur-md shadow-lg border border-[#ece7dc] rounded-full px-4 py-2 flex items-center gap-2 text-[11px] font-bold text-black hover:bg-neutral-50 transition-all z-20"
-          >
-            {isAiMinimized ? (
-              "🤖 Show AI Cards"
-            ) : (
-              <>
-                <MinimizeIcon /> Minimize AI
-              </>
-            )}
-          </button>
-
-          {!isAiMinimized && (
-            <div className="w-[340px] flex flex-col gap-4 h-full pointer-events-none">
-              {/* 🚀 CARD 1: FLOATING AI INSIGHTS BUBBLE 🚀 */}
-              {aiInsights && (
-                <div className="bg-white bg-opacity-95 backdrop-blur-md rounded-2xl border border-[#ece7dc] p-4 shadow-xl flex flex-col gap-2.5 pointer-events-auto transition-all animate-in fade-in slide-in-from-right-4 duration-300">
-                  <div className="flex items-center gap-2 pb-1.5 border-b border-neutral-100">
-                    <span className="text-xs">⚡</span>
-                    <p className="text-[10px] font-black text-black tracking-wider uppercase">
-                      AI Quick Insights
-                    </p>
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    <AiInsightRow
-                      label={
-                        arrivalTime
-                          ? "Recommended Dep. Time"
-                          : "Estimated Dep. Time"
-                      }
-                      value={aiInsights.bestDeparture}
-                      icon={<ClockIcon />}
-                    />
-                    <AiInsightRow
-                      label="Estimated Fare"
-                      value={aiInsights.fare}
-                      icon={<WalletIcon />}
-                    />
-                    <AiInsightRow
-                      label="Primary Transport"
-                      value={aiInsights.transport}
-                      icon={<TransportIcon />}
-                    />
-                  </div>
+          <div className="p-5 flex flex-col gap-4 border-b border-[#ece7dc]">
+            <div className="relative flex flex-col gap-3">
+              <div className="absolute left-[15px] top-[28px] bottom-[28px] w-0.5 border-l-2 border-dashed border-[#ece7dc] z-10" />
+              <div className="flex items-center gap-3 relative z-20">
+                <div className="w-3.5 h-3.5 rounded-full bg-[#f4b400] flex-shrink-0 shadow-[0_0_8px_#f4b400]" />
+                <div className="w-full px-4 py-2 bg-[#f8f6f1] border border-[#ece7dc] rounded-xl focus-within:border-[#f4b400] focus-within:bg-white transition-all">
+                  <PlaceInput
+                    key={`from-${clearKey}`}
+                    placeholder="Mula saan?"
+                    initialValue={initialOriginText}
+                    onPlaceSelect={(p) => { setOrigin(p); setShowRoute(false); }}
+                  />
                 </div>
-              )}
-
-              {/* 🚀 CARD 2: FLOATING AI CHATBOT BUBBLE 🚀 */}
-              <div className="flex-grow flex flex-col bg-white bg-opacity-95 backdrop-blur-md rounded-2xl border border-[#ece7dc] shadow-xl overflow-hidden pointer-events-auto transition-all animate-in fade-in slide-in-from-bottom-4 duration-300 max-h-[55vh]">
-                {/* Chat Header */}
-                <div className="px-4 py-3 bg-black flex items-center justify-between shadow-sm">
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-full bg-[#f4b400] animate-pulse" />
-                    <span className="text-[11px] font-black text-white tracking-wider uppercase">
-                      Komyut AI Guide
-                    </span>
-                  </div>
+              </div>
+              <div className="flex items-center gap-3 relative z-20">
+                <div className="w-3.5 h-3.5 bg-black rounded-full flex-shrink-0" />
+                <div className="w-full px-4 py-2 bg-[#f8f6f1] border border-[#ece7dc] rounded-xl focus-within:border-[#f4b400] focus-within:bg-white transition-all">
+                  <PlaceInput
+                    key={`to-${clearKey}`}
+                    placeholder="Papunta saan?"
+                    initialValue={initialDestinationText}
+                    onPlaceSelect={(p) => { setDestination(p); setShowRoute(false); }}
+                  />
                 </div>
-
-                {/* Chat Body */}
-                <div
-                  ref={chatContainerRef}
-                  className="flex-grow overflow-y-auto p-4 flex flex-col gap-4 custom-scrollbar"
-                >
-                  {chatHistory.map((msg) => (
-                    <div
-                      key={msg.id}
-                      className={`flex w-full ${msg.role === "user" ? "justify-end" : "justify-start"} gap-2`}
-                    >
-                      {msg.role === "ai" && (
-                        <div className="w-6 h-6 rounded-lg bg-black flex items-center justify-center flex-shrink-0 mt-0.5 shadow-sm">
-                          <span className="text-[#f4b400] text-[10px]">✨</span>
-                        </div>
-                      )}
-                      <div
-                        className={`p-3 text-[12px] leading-relaxed shadow-sm rounded-xl max-w-[85%] ${
-                          msg.role === "user"
-                            ? "bg-[#f4b400] text-black font-semibold rounded-tr-none"
-                            : "bg-white border border-[#ece7dc] text-neutral-800 font-medium rounded-tl-none"
-                        }`}
-                      >
-                        {msg.text}
-                        {/* Audio puck */}
-                        {msg.role === "ai" && (
-                          <div className="mt-2 pt-2 border-t border-neutral-50 flex items-center justify-end">
-                            {currentlyPlayingId === msg.id ? (
-                              <div className="flex items-center gap-1.5">
-                                <button
-                                  onClick={toggleAudio}
-                                  className="px-2 py-1 bg-neutral-100 text-black text-[10px] font-bold rounded"
-                                >
-                                  {isPaused ? "▶" : "⏸"}
-                                </button>
-                                <button
-                                  onClick={stopAudio}
-                                  className="px-2 py-1 bg-red-50 text-red-600 text-[10px] font-bold rounded"
-                                >
-                                  ⏹
-                                </button>
-                              </div>
-                            ) : (
-                              <button
-                                onClick={() =>
-                                  playAudio(msg.audioUrl, msg.id, msg.text)
-                                }
-                                className="flex items-center gap-1 px-2 py-1 bg-[#f8f6f1] text-black text-[10px] font-bold rounded border border-neutral-200"
-                              >
-                                🔊 <span className="text-[9px]">Listen</span>
-                              </button>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-
-                  {isAiLoading && (
-                    <div className="flex gap-2 items-center text-neutral-400 text-[11px] font-bold animate-pulse">
-                      <span className="w-4 h-4 border-2 border-[#f4b400] border-t-transparent rounded-full animate-spin" />
-                      KomyutAI is checking routes...
-                    </div>
-                  )}
-                </div>
-
-                {/* Chat Input form */}
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    handleAskAI(
-                      chatInput,
-                      routeResult?.routes[selectedRouteIndex],
-                    );
-                  }}
-                  className="p-3 border-t border-[#ece7dc] bg-white bg-opacity-80"
-                >
-                  <div className="relative flex items-center">
-                    <input
-                      type="text"
-                      value={chatInput}
-                      onChange={(e) => setChatInput(e.target.value)}
-                      disabled={!routeResult}
-                      placeholder={
-                        routeResult
-                          ? "Ask about traffic, alternative transfers..."
-                          : "Search a route first..."
-                      }
-                      className="w-full bg-[#f8f6f1] border border-[#ece7dc] pl-3 pr-9 py-2.5 rounded-xl text-[12px] font-medium outline-none focus:border-[#f4b400] transition-colors disabled:opacity-50"
-                    />
-                    <button
-                      type="submit"
-                      disabled={
-                        !chatInput.trim() || isAiLoading || !routeResult
-                      }
-                      className="absolute right-1.5 w-7 h-7 flex items-center justify-center bg-black text-[#f4b400] rounded-lg disabled:opacity-30"
-                    >
-                      ↑
-                    </button>
-                  </div>
-                </form>
               </div>
             </div>
-          )}
+
+            <div className="flex items-center justify-between gap-3 mt-1">
+              <div className="flex items-center gap-2 px-4 py-2 bg-[#f8f6f1] border border-[#ece7dc] rounded-xl focus-within:border-[#f4b400] transition-colors flex-grow">
+                <span className="text-[11px] font-bold text-neutral-400 whitespace-nowrap">🏁 Arrive By</span>
+                <input
+                  type="time"
+                  value={arrivalTime}
+                  onChange={(e) => setArrivalTime(e.target.value)}
+                  className="bg-transparent outline-none text-[13px] font-black text-black flex-grow w-full cursor-pointer"
+                />
+              </div>
+              <button
+                onClick={handleFindRoute}
+                disabled={!canSearch || isSearching}
+                className="px-5 py-2.5 bg-black hover:bg-neutral-800 text-white text-[12px] font-bold rounded-xl transition-all shadow-md flex-shrink-0 disabled:opacity-50"
+              >
+                {isSearching ? "..." : "Search"}
+              </button>
+            </div>
+          </div>
+
+          <div className="flex-grow overflow-y-auto bg-white custom-scrollbar">
+            {isSearching && (
+              <div className="p-10 flex flex-col items-center justify-center gap-2 text-center">
+                <div className="w-6 h-6 border-2 border-[#f4b400] border-t-transparent rounded-full animate-spin" />
+                <p className="text-[12px] text-neutral-400 font-bold">Naghahanap ng best commute option...</p>
+              </div>
+            )}
+            {!routeResult && !isSearching && (
+              <div className="h-64 flex flex-col items-center justify-center p-6 text-center opacity-50">
+                <span className="text-2xl mb-2">🚌</span>
+                <p className="text-[11px] font-bold text-neutral-500">I-type ang lokasyon para makita<br />ang mga suhestiyong ruta.</p>
+              </div>
+            )}
+            {routeResult && (
+              <div className="flex flex-col divide-y divide-neutral-100">
+                <div className="p-4 bg-[#f8f6f1] border-b border-[#ece7dc]">
+                  <p className="text-[10px] font-black text-neutral-400 uppercase tracking-wider">Suggested Commute Routes</p>
+                </div>
+                {routeResult.routes.map((route, idx) => {
+                  const isSelected = selectedRouteIndex === idx;
+                  return (
+                    <div key={idx} className="flex flex-col">
+                      <button
+                        onClick={() => setSelectedRouteIndex(idx)}
+                        className={`relative flex items-start justify-between p-4 border-l-4 text-left transition-all ${
+                          isSelected ? "border-l-[#f4b400] bg-[#fffcf5]" : "border-l-transparent bg-white hover:bg-neutral-50"
+                        }`}
+                      >
+                        <div className="flex flex-col gap-0.5">
+                          {idx === 0 && <span className="text-[9px] font-black text-[#f4b400] tracking-wider mb-1 uppercase flex items-center gap-1">⭐ Best Route</span>}
+                          <span className="text-[14px] font-black text-black tracking-tight">{route.legs[0].duration.text}</span>
+                          <span className="text-[11px] font-semibold text-neutral-500 truncate max-w-[200px]">via {route.summary || "Commute Line"}</span>
+                        </div>
+                        <span className="text-[11px] font-bold text-neutral-400 bg-neutral-100 px-2 py-0.5 rounded-md mt-auto mb-auto">
+                          {route.legs[0].distance.text}
+                        </span>
+                      </button>
+                      {isSelected && (
+                        <div className="px-5 pb-4 pt-1 bg-[#fffcf5]">
+                          <div className="flex flex-col gap-3 pl-3 border-l-2 border-dashed border-[#f4b400] mt-1 relative">
+                            <div className="absolute -left-[5px] top-0 w-2 h-2 rounded-full bg-[#f4b400]" />
+                            {route.legs[0].steps.map((step, sIdx) => (
+                              <div key={sIdx} className="flex items-start gap-2.5">
+                                <span className="text-[13px] mt-0.5 flex-shrink-0">{step.travel_mode === "TRANSIT" ? "🚌" : "🚶‍♂️"}</span>
+                                <div className="flex flex-col">
+                                  <span className="text-[11px] text-neutral-700 font-medium leading-relaxed" dangerouslySetInnerHTML={{ __html: step.instructions }} />
+                                  {step.transit && (
+                                    <span className="text-[10px] text-neutral-400 font-semibold mt-0.5">
+                                      {step.transit.line?.short_name || step.transit.line?.name} • {step.transit.num_stops} stops
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                            ))}
+                            <div className="absolute -left-[5px] -bottom-[2px] w-2 h-2 rounded-full bg-black" />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
         </div>
-      )}
+
+        <div className="absolute bottom-6 left-4 md:left-6 z-20 flex flex-col gap-1 shadow-md rounded-lg overflow-hidden border border-neutral-200">
+          <button
+            onClick={() => setShowTraffic(!showTraffic)}
+            className={`w-9 h-9 flex items-center justify-center font-black text-md transition-colors border-b border-neutral-100 ${
+              showTraffic ? 'bg-[#fffcf5] text-[#f4b400]' : 'bg-white hover:bg-neutral-50 text-neutral-500'
+            }`}
+            title="Toggle Traffic"
+          >
+            🚦
+          </button>
+          <button onClick={() => map?.setZoom((map.getZoom() ?? 12) + 1)} className="w-9 h-9 bg-white hover:bg-neutral-50 text-black font-black text-md flex items-center justify-center">+</button>
+          <button onClick={() => map?.setZoom((map.getZoom() ?? 12) - 1)} className="w-9 h-9 bg-white hover:bg-neutral-50 text-black font-black text-md border-t border-neutral-100 flex items-center justify-center">−</button>
+        </div>
+
+        {routeResult && (
+          <div className="absolute bottom-4 left-4 right-4 md:top-6 md:right-6 md:left-auto md:bottom-6 z-10 flex flex-col gap-4 pointer-events-none items-end w-[calc(100%-2rem)] md:w-[340px]">
+            <button
+              onClick={() => setIsAiMinimized(!isAiMinimized)}
+              className="pointer-events-auto bg-white bg-opacity-95 backdrop-blur-md shadow-lg border border-[#ece7dc] rounded-full px-4 py-2 flex items-center gap-2 text-[11px] font-bold text-black hover:bg-neutral-50 transition-all z-20"
+            >
+              {isAiMinimized ? "🤖 Show AI Cards" : <><MinimizeIcon /> Minimize AI</>}
+            </button>
+
+            {!isAiMinimized && (
+              <div className="w-full flex flex-col gap-4 max-h-[50vh] md:max-h-full pointer-events-none">
+                {aiInsights && (
+                  <div className="bg-white bg-opacity-95 backdrop-blur-md rounded-2xl border border-[#ece7dc] p-4 shadow-xl flex flex-col gap-2.5 pointer-events-auto transition-all animate-in fade-in slide-in-from-right-4 duration-300">
+                    <div className="flex items-center gap-2 pb-1.5 border-b border-neutral-100">
+                      <span className="text-xs">⚡</span>
+                      <p className="text-[10px] font-black text-black tracking-wider uppercase">AI Quick Insights</p>
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      <AiInsightRow label={arrivalTime ? "Recommended Dep. Time" : "Estimated Dep. Time"} value={aiInsights.bestDeparture} icon={<ClockIcon />} />
+                      <AiInsightRow label="Estimated Fare" value={aiInsights.fare} icon={<WalletIcon />} />
+                      <AiInsightRow label="Primary Transport" value={aiInsights.transport} icon={<TransportIcon />} />
+                    </div>
+                  </div>
+                )}
+
+                <div className="flex-grow flex flex-col bg-white bg-opacity-95 backdrop-blur-md rounded-2xl border border-[#ece7dc] shadow-xl overflow-hidden pointer-events-auto transition-all animate-in fade-in slide-in-from-bottom-4 duration-300 max-h-[45vh] md:max-h-[55vh]">
+                  <div className="px-4 py-3 bg-black flex items-center justify-between shadow-sm">
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 rounded-full bg-[#f4b400] animate-pulse" />
+                      <span className="text-[11px] font-black text-white tracking-wider uppercase">Komyut AI Guide</span>
+                    </div>
+                  </div>
+
+                  <div ref={chatContainerRef} className="flex-grow overflow-y-auto p-4 flex flex-col gap-4 custom-scrollbar">
+                    {chatHistory.map((msg) => (
+                      <div key={msg.id} className={`flex w-full ${msg.role === "user" ? "justify-end" : "justify-start"} gap-2`}>
+                        {msg.role === "ai" && (
+                          <div className="w-6 h-6 rounded-lg bg-black flex items-center justify-center flex-shrink-0 mt-0.5 shadow-sm">
+                            <span className="text-[#f4b400] text-[10px]">✨</span>
+                          </div>
+                        )}
+                        <div className={`p-3 text-[12px] leading-relaxed shadow-sm rounded-xl max-w-[85%] ${
+                          msg.role === "user" ? "bg-[#f4b400] text-black font-semibold rounded-tr-none" : "bg-white border border-[#ece7dc] text-neutral-800 font-medium rounded-tl-none"
+                        }`}>
+                          {msg.text}
+                          {msg.role === "ai" && (
+                            <div className="mt-2 pt-2 border-t border-neutral-50 flex items-center justify-end">
+                              {currentlyPlayingId === msg.id ? (
+                                <div className="flex items-center gap-1.5">
+                                  <button onClick={toggleAudio} className="px-2 py-1 bg-neutral-100 text-black text-[10px] font-bold rounded">{isPaused ? "▶" : "⏸"}</button>
+                                  <button onClick={stopAudio} className="px-2 py-1 bg-red-50 text-red-600 text-[10px] font-bold rounded">⏹</button>
+                                </div>
+                              ) : (
+                                <button onClick={() => playAudio(msg.audioUrl, msg.id, msg.text)} className="flex items-center gap-1 px-2 py-1 bg-[#f8f6f1] text-black text-[10px] font-bold rounded border border-neutral-200">
+                                  🔊 <span className="text-[9px]">Listen</span>
+                                </button>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                    {isAiLoading && (
+                      <div className="flex gap-2 items-center text-neutral-400 text-[11px] font-bold animate-pulse">
+                        <span className="w-4 h-4 border-2 border-[#f4b400] border-t-transparent rounded-full animate-spin" />
+                        KomyutAI is checking routes...
+                      </div>
+                    )}
+                  </div>
+
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      handleAskAI(chatInput, routeResult?.routes[selectedRouteIndex]);
+                    }}
+                    className="p-3 border-t border-[#ece7dc] bg-white bg-opacity-80"
+                  >
+                    <div className="relative flex items-center">
+                      <input
+                        type="text"
+                        value={chatInput}
+                        onChange={(e) => setChatInput(e.target.value)}
+                        disabled={!routeResult}
+                        placeholder={routeResult ? "Ask about traffic..." : "Search a route..."}
+                        className="w-full bg-[#f8f6f1] border border-[#ece7dc] pl-3 pr-9 py-2.5 rounded-xl text-[12px] font-medium outline-none focus:border-[#f4b400] transition-colors disabled:opacity-50"
+                      />
+                      <button type="submit" disabled={!chatInput.trim() || isAiLoading || !routeResult} className="absolute right-1.5 w-7 h-7 flex items-center justify-center bg-black text-[#f4b400] rounded-lg disabled:opacity-30">↑</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
 
-export default MapPageInner;
+export default MapPage;

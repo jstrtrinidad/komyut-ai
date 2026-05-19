@@ -16,6 +16,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import ManageRoutes from "../pages/admin/Routes";
 import Inquiries from "../pages/admin/Inquiries";
 
+
 function AppRoutes() {
   return (
     <Routes>
@@ -24,7 +25,10 @@ function AppRoutes() {
         <Route path="about" element={<About />} />
         <Route path="faq" element={<FAQ />} />
         <Route path="privacy-policy" element={<PrivacyPolicy />} />
-        <Route path="terms-and-conditions" element={<TermsConditions />} />
+        <Route
+          path="terms-conditions"
+          element={<TermsConditions />}
+        />
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
         <Route path="verify-otp" element={<VerifyOTP />} />

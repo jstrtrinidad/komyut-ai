@@ -76,7 +76,7 @@ function About() {
               Smarter transportation for modern city life.
             </h2>
 
-            <p className="mt-8 text-lg leading-relaxed text-[#5f6368]">
+            <p className="mt-8 text-lg leading-relaxed text-black">
               Daily commuting in Metro Manila can be stressful,
               unpredictable, and time-consuming.
             </p>
