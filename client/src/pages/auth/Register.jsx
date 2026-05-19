@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -24,7 +25,7 @@ function Register() {
 
   const [errors, setErrors] = useState({});
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
 
     const newErrors = {};
@@ -57,14 +58,36 @@ function Register() {
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
-        setLoading(true);
+  try {
+    setLoading(true);
 
-        setTimeout(() => {
-        setLoading(false);
+    const response = await axios.post(
+      "http://localhost:5001/api/auth/register",
+      {
+        firstName,
+        lastName,
+        email,
+        password,
+        confirmPassword,
+      }
+    );
 
-        console.log("REGISTER SUCCESS");
-        }, 2000);
-    }
+    alert(response.data.message);
+
+    console.log(response.data);
+
+  } catch (error) {
+    console.error(error);
+
+    alert(
+      error.response?.data?.message ||
+      "Registration failed"
+    );
+
+  } finally {
+    setLoading(false);
+  }
+}
   };
 
   const [loading, setLoading] = useState(false);
