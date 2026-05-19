@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
-
 import faqData from "../../data/faqData";
 
 function FAQAccordion() {
@@ -15,30 +14,32 @@ function FAQAccordion() {
       {faqData.map((faq, index) => (
         <div
           key={index}
-          className="overflow-hidden rounded-[28px] border border-white/10 bg-white/5 backdrop-blur-xl"
+          className="overflow-hidden rounded-[28px] border border-[#ece7dc] bg-white shadow-sm"
         >
           <button
             onClick={() => toggleAccordion(index)}
-            className="flex w-full items-center justify-between px-6 py-5 text-left"
+            className="flex w-full flex-col px-6 py-5 text-left transition hover:bg-[#faf7f2]"
           >
-            <h3 className="text-lg font-semibold text-white">
-              {faq.question}
-            </h3>
+            {/* NEW: Label/Category Section */}
+            <span className="mb-2 text-xs font-bold uppercase tracking-widest text-[#f4b400]">
+              {faq.category}
+            </span>
 
-            <ChevronDown
-              className={`transition ${
-                activeIndex === index
-                  ? "rotate-180 text-cyan-400"
-                  : "text-slate-400"
-              }`}
-            />
+            <div className="flex w-full items-center justify-between">
+              <h3 className="text-lg font-bold text-black">{faq.question}</h3>
+              <ChevronDown
+                className={`transition ${
+                  activeIndex === index
+                    ? "rotate-180 text-black"
+                    : "text-[#5f6368]"
+                }`}
+              />
+            </div>
           </button>
 
           {activeIndex === index && (
             <div className="px-6 pb-6">
-              <p className="leading-relaxed text-slate-400">
-                {faq.answer}
-              </p>
+              <p className="leading-relaxed text-[#5f6368]">{faq.answer}</p>
             </div>
           )}
         </div>

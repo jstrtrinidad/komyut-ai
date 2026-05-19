@@ -480,7 +480,7 @@ function MapPageInner() {
 
     try {
       const response = await fetch(
-        "http://localhost:5001/api/ai/commute-info",
+        "http://localhost:5000/api/ai/commute-info",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
