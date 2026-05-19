@@ -1,34 +1,50 @@
 function TermsConditions() {
   return (
-    <section className="min-h-screen bg-slate-950 px-6 py-24 text-white">
-      <div className="mx-auto max-w-4xl">
-        <h1 className="mb-10 text-5xl font-black">
-          Terms & Conditions
-        </h1>
+    <div className="mx-auto max-w-5xl px-6 py-24">
+      <h1 className="text-5xl font-black text-black">
+        Terms & Conditions
+      </h1>
 
-        <div className="space-y-8 text-slate-300">
-          <p>
-            By accessing CommuteSmart AI, users agree to follow all
-            applicable laws and regulations.
+      <p className="mt-8 leading-relaxed text-[#5f6368]">
+        By using Komyut AI, you agree to the following terms and
+        conditions.
+      </p>
+
+      <div className="mt-10 space-y-8">
+        <div>
+          <h2 className="text-2xl font-bold text-black">
+            Usage
+          </h2>
+
+          <p className="mt-3 text-[#5f6368] leading-relaxed">
+            Users must use the platform responsibly and comply with
+            applicable laws.
           </p>
+        </div>
 
-          <p>
-            Route recommendations and AI-generated travel insights are
-            provided for informational purposes only.
+        <div>
+          <h2 className="text-2xl font-bold text-black">
+            Accuracy
+          </h2>
+
+          <p className="mt-3 text-[#5f6368] leading-relaxed">
+            Route and transport information may change and is not always
+            guaranteed to be fully accurate.
           </p>
+        </div>
 
-          <p>
-            CommuteSmart AI is not responsible for delays, route changes,
-            or transportation disruptions caused by external factors.
-          </p>
+        <div>
+          <h2 className="text-2xl font-bold text-black">
+            Liability
+          </h2>
 
-          <p>
-            Users are responsible for ensuring the accuracy of their
-            commute details before making travel decisions.
+          <p className="mt-3 text-[#5f6368] leading-relaxed">
+            Komyut AI is not liable for delays, disruptions, or issues
+            caused by third-party transport services.
           </p>
         </div>
       </div>
-    </section>
+    </div>
   );
 }
 

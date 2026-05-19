@@ -24,9 +24,14 @@ function FAQ() {
 
       {/* CONTENT */}
       <section className="bg-white px-6 py-24">
-        <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-2">
-          <FAQAccordion />
+        <div className="mx-auto grid max-w-7xl items-start gap-16 lg:grid-cols-[1.1fr_0.9fr]">
+          
+          <div className="rounded-[32px] border border-[#ece7dc] bg-[#f8f6f1] p-10">
+            <FAQAccordion />
+          </div>
+
           <ContactForm />
+          
         </div>
       </section>
     </>

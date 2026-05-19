@@ -15,28 +15,28 @@ function FAQAccordion() {
       {faqData.map((faq, index) => (
         <div
           key={index}
-          className="overflow-hidden rounded-[28px] border border-white/10 bg-white/5 backdrop-blur-xl"
+          className="overflow-hidden rounded-[28px] border border-[#f4d98b] bg-white"
         >
           <button
             onClick={() => toggleAccordion(index)}
             className="flex w-full items-center justify-between px-6 py-5 text-left"
           >
-            <h3 className="text-lg font-semibold text-white">
+            <h3 className="text-lg font-bold text-black">
               {faq.question}
             </h3>
 
             <ChevronDown
               className={`transition ${
                 activeIndex === index
-                  ? "rotate-180 text-cyan-400"
-                  : "text-slate-400"
+                  ? "rotate-180 text-[#f4b400]"
+                  : "text-black"
               }`}
             />
           </button>
 
           {activeIndex === index && (
             <div className="px-6 pb-6">
-              <p className="leading-relaxed text-slate-400">
+              <p className="leading-relaxed text-black">
                 {faq.answer}
               </p>
             </div>

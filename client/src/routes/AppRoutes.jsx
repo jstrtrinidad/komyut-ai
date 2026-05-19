@@ -14,6 +14,7 @@ import VerifyOTP from "../pages/auth/VerifyOTP";
 import Dashboard from "../pages/admin/Dashboard";
 import ProtectedRoute from "./ProtectedRoute";
 
+
 function AppRoutes() {
   return (
     <Routes>
@@ -23,7 +24,10 @@ function AppRoutes() {
         <Route path="about" element={<About />} />
         <Route path="faq" element={<FAQ />} />
         <Route path="privacy-policy" element={<PrivacyPolicy />} />
-        <Route path="terms-and-conditions" element={<TermsConditions />} />
+        <Route
+          path="terms-conditions"
+          element={<TermsConditions />}
+        />
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
         <Route path="verify-otp" element={<VerifyOTP />} />
