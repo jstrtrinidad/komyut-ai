@@ -1,3 +1,4 @@
+import logo from "../../assets/icons/logo.png";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
@@ -9,22 +10,18 @@ function Navbar() {
     <header className="sticky top-0 z-50 border-b border-[#ece7dc] bg-white/90 backdrop-blur-xl">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
         {/* Logo */}
-        <Link
-          to="/"
-          className="flex items-center gap-3"
-        >
-          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#f4b400] text-xl font-black text-white shadow-sm">
-            ⌘
-          </div>
-
-          <h1 className="text-2xl font-black tracking-tight text-black">
-            komyut
-            <span className="text-[#f4b400]">
-              {" "}
-              AI
-            </span>
-          </h1>
-        </Link>
+      {/* Logo */}
+      {/* Logo */}
+      <Link
+        to="/"
+        className="flex items-center"
+      >
+        <img
+          src={logo}
+          alt="Komyut AI Logo"
+          className="h-15 w-auto object-contain"
+        />
+      </Link>
 
         {/* Desktop Nav */}
         <nav className="hidden items-center gap-10 md:flex">
