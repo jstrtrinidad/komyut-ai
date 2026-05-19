@@ -5,21 +5,51 @@ const MANILA_CENTER = { lat: 14.5995, lng: 120.9842 };
 
 // ─── SVG Icons para sa AI Cards ───────────────────────────────────────────────
 const ClockIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
     <circle cx="12" cy="12" r="10"></circle>
     <polyline points="12 6 12 12 16 14"></polyline>
   </svg>
 );
 
 const WalletIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
     <rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect>
     <line x1="12" y1="20" x2="12" y2="4"></line>
   </svg>
 );
 
 const TransportIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
     <rect x="4" y="3" width="16" height="16" rx="2" ry="2"></rect>
     <path d="M4 11h16"></path>
     <path d="M12 3v8"></path>
@@ -31,7 +61,17 @@ const TransportIcon = () => (
 );
 
 const MinimizeIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
     <polyline points="4 14 12 22 20 14"></polyline>
     <polyline points="4 2 12 10 20 2"></polyline>
   </svg>
@@ -42,8 +82,15 @@ function AiInsightRow({ label, value, icon }) {
   return (
     <div className="flex items-center justify-between p-2.5 bg-white bg-opacity-70 rounded-xl border border-neutral-100 shadow-sm">
       <div className="flex flex-col gap-0.5 flex-grow min-w-0">
-        <span className="text-[10px] text-neutral-400 font-bold uppercase tracking-wider">{label}</span>
-        <span className="text-[12px] font-black text-black leading-tight break-words pr-1" title={value}>{value}</span>
+        <span className="text-[10px] text-neutral-400 font-bold uppercase tracking-wider">
+          {label}
+        </span>
+        <span
+          className="text-[12px] font-black text-black leading-tight break-words pr-1"
+          title={value}
+        >
+          {value}
+        </span>
       </div>
       <div className="w-8 h-8 rounded-xl bg-[#fff8e6] text-[#f4b400] flex items-center justify-center flex-shrink-0 ml-2">
         {icon}
@@ -76,7 +123,7 @@ function PlaceInput({ placeholder, onPlaceSelect }) {
               north: 14.7877,
               south: 14.3466,
               east: 121.1338,
-              west: 120.9300,
+              west: 120.93,
             },
           });
         setSuggestions(results ?? []);
@@ -164,21 +211,21 @@ function MultiRouteRenderer({ directionsResult, selectedRouteIndex }) {
 
     renderersRef.current = directionsResult.routes.map((_, idx) => {
       const isSelected = idx === selectedRouteIndex;
-      
+
       const renderer = new routesLib.DirectionsRenderer({
         map,
         directions: directionsResult,
         routeIndex: idx,
-        suppressMarkers: !isSelected, 
+        suppressMarkers: !isSelected,
         preserveViewport: true,
         polylineOptions: {
           strokeColor: isSelected ? "#f4b400" : "#fde047", // Matingkad na dilaw vs Light soft yellow
           strokeWeight: isSelected ? 6 : 4.5,
           strokeOpacity: isSelected ? 1.0 : 0.65,
-          zIndex: isSelected ? 100 : 10, 
+          zIndex: isSelected ? 100 : 10,
         },
       });
-      
+
       return renderer;
     });
 
@@ -203,11 +250,11 @@ function MapPageInner() {
   const [origin, setOrigin] = useState(null);
   const [destination, setDestination] = useState(null);
   const [arrivalTime, setArrivalTime] = useState("");
-  
+
   const [routeResult, setRouteResult] = useState(null);
   const [selectedRouteIndex, setSelectedRouteIndex] = useState(0);
   const [aiInsights, setAiInsights] = useState(null);
-  
+
   const [isSearching, setIsSearching] = useState(false);
   const [showRoute, setShowRoute] = useState(false);
   const [clearKey, setClearKey] = useState(0);
@@ -224,7 +271,8 @@ function MapPageInner() {
 
   useEffect(() => {
     if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+      chatContainerRef.current.scrollTop =
+        chatContainerRef.current.scrollHeight;
     }
   }, [chatHistory, isAiLoading, isAiMinimized]);
 
@@ -249,27 +297,39 @@ function MapPageInner() {
       if (arrivalTime) {
         const [hours, minutes] = arrivalTime.split(":");
         targetTime.setHours(parseInt(hours, 10), parseInt(minutes, 10), 0, 0);
-        const depTime = new Date(targetTime.getTime() - (durationInSeconds * 1000) - (10 * 60000));
-        bestTime = depTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const depTime = new Date(
+          targetTime.getTime() - durationInSeconds * 1000 - 10 * 60000,
+        );
+        bestTime = depTime.toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
       }
     }
 
     // 2. Transport Modes Parsing & Fare Breakdown
-    const transitSteps = leg.steps.filter(step => step.travel_mode === "TRANSIT");
+    const transitSteps = leg.steps.filter(
+      (step) => step.travel_mode === "TRANSIT",
+    );
     let transportMode = "Lakad Lamang";
     let estimatedFareText = "₱0.00 (Walk)";
 
     if (transitSteps.length > 0) {
       // Isalin ang mga transit lines para sa summary display
-      const lines = transitSteps.map(step => {
-        return step.transit?.line?.short_name || step.transit?.line?.name || "Transit";
+      const lines = transitSteps.map((step) => {
+        return (
+          step.transit?.line?.short_name ||
+          step.transit?.line?.name ||
+          "Transit"
+        );
       });
-      transportMode = lines.slice(0, 3).join(" ➔ ") + (lines.length > 3 ? "..." : "");
+      transportMode =
+        lines.slice(0, 3).join(" ➔ ") + (lines.length > 3 ? "..." : "");
 
       // Dynamic Itemized Fare Calculations base sa Manila Matrix
       let fareBreakdown = {};
 
-      transitSteps.forEach(step => {
+      transitSteps.forEach((step) => {
         const type = step.transit?.line?.vehicle?.type || "";
         const name = (step.transit?.line?.name || "").toUpperCase();
         const shortName = (step.transit?.line?.short_name || "").toUpperCase();
@@ -278,19 +338,31 @@ function MapPageInner() {
         let modeKey = "Jeep/UV";
         let stepFare = 15;
 
-        if (type === "BUS" || name.includes("BUS") || shortName.includes("BUS")) {
+        if (
+          type === "BUS" ||
+          name.includes("BUS") ||
+          shortName.includes("BUS")
+        ) {
           modeKey = "Bus";
           stepFare = 15 + Math.round(distanceKm * 2.1);
         } else if (
-          type === "RAIL" || type === "SUBWAY" || type === "HEAVY_RAIL" ||
-          name.includes("LRT") || name.includes("MRT") || name.includes("METRO") ||
-          shortName.includes("LRT") || shortName.includes("MRT")
+          type === "RAIL" ||
+          type === "SUBWAY" ||
+          type === "HEAVY_RAIL" ||
+          name.includes("LRT") ||
+          name.includes("MRT") ||
+          name.includes("METRO") ||
+          shortName.includes("LRT") ||
+          shortName.includes("MRT")
         ) {
-          if (name.includes("LRT 1") || shortName.includes("L1")) modeKey = "LRT-1";
-          else if (name.includes("LRT 2") || shortName.includes("L2")) modeKey = "LRT-2";
-          else if (name.includes("MRT 3") || shortName.includes("M3")) modeKey = "MRT-3";
+          if (name.includes("LRT 1") || shortName.includes("L1"))
+            modeKey = "LRT-1";
+          else if (name.includes("LRT 2") || shortName.includes("L2"))
+            modeKey = "LRT-2";
+          else if (name.includes("MRT 3") || shortName.includes("M3"))
+            modeKey = "MRT-3";
           else modeKey = "Tren";
-          
+
           stepFare = 15 + Math.round(distanceKm * 1.6);
         } else {
           modeKey = "Jeep/UV";
@@ -314,9 +386,9 @@ function MapPageInner() {
     setAiInsights({
       bestDeparture: bestTime,
       fare: estimatedFareText,
-      transport: transportMode
+      transport: transportMode,
     });
-  }, [routeResult, arrivalTime, selectedRouteIndex]); 
+  }, [routeResult, arrivalTime, selectedRouteIndex]);
 
   // ─── Audio Handlers ──────────────────────────────
   const playAudio = (url, id, text) => {
@@ -324,25 +396,42 @@ function MapPageInner() {
     if (url) {
       const audio = new Audio(url);
       audioRef.current = audio;
-      audio.onplay = () => { setCurrentlyPlayingId(id); setIsPaused(false); };
+      audio.onplay = () => {
+        setCurrentlyPlayingId(id);
+        setIsPaused(false);
+      };
       audio.onpause = () => setIsPaused(true);
-      audio.onended = () => { setCurrentlyPlayingId(null); setIsPaused(false); };
+      audio.onended = () => {
+        setCurrentlyPlayingId(null);
+        setIsPaused(false);
+      };
       audio.play().catch((e) => console.error("Playback failed:", e));
     } else if ("speechSynthesis" in window && text) {
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.rate = 1.0;
-      utterance.onstart = () => { setCurrentlyPlayingId(id); setIsPaused(false); };
+      utterance.onstart = () => {
+        setCurrentlyPlayingId(id);
+        setIsPaused(false);
+      };
       utterance.onpause = () => setIsPaused(true);
       utterance.onresume = () => setIsPaused(false);
-      utterance.onend = () => { setCurrentlyPlayingId(null); setIsPaused(false); };
-      utterance.onerror = () => { setCurrentlyPlayingId(null); setIsPaused(false); };
+      utterance.onend = () => {
+        setCurrentlyPlayingId(null);
+        setIsPaused(false);
+      };
+      utterance.onerror = () => {
+        setCurrentlyPlayingId(null);
+        setIsPaused(false);
+      };
       window.speechSynthesis.speak(utterance);
     }
   };
 
   const toggleAudio = () => {
     if (audioRef.current) {
-      audioRef.current.paused ? audioRef.current.play() : audioRef.current.pause();
+      audioRef.current.paused
+        ? audioRef.current.play()
+        : audioRef.current.pause();
     } else if ("speechSynthesis" in window) {
       if (window.speechSynthesis.paused) window.speechSynthesis.resume();
       else if (window.speechSynthesis.speaking) window.speechSynthesis.pause();
@@ -390,16 +479,19 @@ function MapPageInner() {
     }
 
     try {
-      const response = await fetch("http://localhost:5000/api/ai/commute-info", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          prompt: customPrompt,
-          origin: origin?.name || origin?.address,
-          destination: destination?.name || destination?.address,
-          routeContext: routeContextText,
-        }),
-      });
+      const response = await fetch(
+        "http://localhost:5001/api/ai/commute-info",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            prompt: customPrompt,
+            origin: origin?.name || origin?.address,
+            destination: destination?.name || destination?.address,
+            routeContext: routeContextText,
+          }),
+        },
+      );
       const data = await response.json();
 
       let audioUrl = null;
@@ -444,11 +536,14 @@ function MapPageInner() {
     setAiInsights(null);
     setIsSearching(true);
     setShowRoute(true);
-    lastAutoPrompt.current = ""; 
+    lastAutoPrompt.current = "";
 
     const service = new routesLib.DirectionsService();
 
-    let transitOpts = { modes: ["BUS", "RAIL", "SUBWAY", "TRAM"], routingPreference: "FEWER_TRANSFERS" };
+    let transitOpts = {
+      modes: ["BUS", "RAIL", "SUBWAY", "TRAM"],
+      routingPreference: "FEWER_TRANSFERS",
+    };
     if (arrivalTime) {
       const targetTime = new Date();
       const [hours, minutes] = arrivalTime.split(":");
@@ -483,16 +578,14 @@ function MapPageInner() {
           console.warn("Transit route request failed due to " + status);
           setShowRoute(false);
         }
-      }
+      },
     );
   };
 
   return (
     <div className="relative w-screen h-screen flex bg-neutral-100 font-sans overflow-hidden">
-      
       {/* ─── LEFT SIDEBAR: ROUTE CONTROLS ─── */}
       <div className="relative z-10 w-[360px] flex flex-col bg-white shadow-2xl border-r border-[#ece7dc] h-full flex-shrink-0">
-        
         {/* Header */}
         <div className="p-5 flex items-center justify-between border-b border-[#ece7dc]">
           <div className="flex items-center gap-2.5">
@@ -524,7 +617,7 @@ function MapPageInner() {
         <div className="p-5 flex flex-col gap-4 border-b border-[#ece7dc]">
           <div className="relative flex flex-col gap-3">
             <div className="absolute left-[15px] top-[28px] bottom-[28px] w-0.5 border-l-2 border-dashed border-[#ece7dc] z-10" />
-            
+
             {/* Origin */}
             <div className="flex items-center gap-3 relative z-20">
               <div className="w-3.5 h-3.5 rounded-full bg-[#f4b400] flex-shrink-0 shadow-[0_0_8px_#f4b400]" />
@@ -559,7 +652,9 @@ function MapPageInner() {
           {/* Arrive By & Search */}
           <div className="flex items-center justify-between gap-3 mt-1">
             <div className="flex items-center gap-2 px-4 py-2 bg-[#f8f6f1] border border-[#ece7dc] rounded-xl focus-within:border-[#f4b400] transition-colors flex-grow">
-              <span className="text-[11px] font-bold text-neutral-400 whitespace-nowrap">🏁 Arrive By</span>
+              <span className="text-[11px] font-bold text-neutral-400 whitespace-nowrap">
+                🏁 Arrive By
+              </span>
               <input
                 type="time"
                 value={arrivalTime}
@@ -567,7 +662,7 @@ function MapPageInner() {
                 className="bg-transparent outline-none text-[13px] font-black text-black flex-grow w-full cursor-pointer"
               />
             </div>
-            
+
             <button
               onClick={handleFindRoute}
               disabled={!canSearch || isSearching}
@@ -583,21 +678,29 @@ function MapPageInner() {
           {isSearching && (
             <div className="p-10 flex flex-col items-center justify-center gap-2 text-center">
               <div className="w-6 h-6 border-2 border-[#f4b400] border-t-transparent rounded-full animate-spin" />
-              <p className="text-[12px] text-neutral-400 font-bold">Naghahanap ng best commute option...</p>
+              <p className="text-[12px] text-neutral-400 font-bold">
+                Naghahanap ng best commute option...
+              </p>
             </div>
           )}
 
           {!routeResult && !isSearching && (
             <div className="h-full flex flex-col items-center justify-center p-6 text-center opacity-50">
               <span className="text-2xl mb-2">🚌</span>
-              <p className="text-[11px] font-bold text-neutral-500">I-type ang lokasyon para makita<br />ang mga suhestiyong ruta.</p>
+              <p className="text-[11px] font-bold text-neutral-500">
+                I-type ang lokasyon para makita
+                <br />
+                ang mga suhestiyong ruta.
+              </p>
             </div>
           )}
 
           {routeResult && (
             <div className="flex flex-col divide-y divide-neutral-100">
               <div className="p-4 bg-[#f8f6f1] border-b border-[#ece7dc]">
-                <p className="text-[10px] font-black text-neutral-400 uppercase tracking-wider">Suggested Commute Routes</p>
+                <p className="text-[10px] font-black text-neutral-400 uppercase tracking-wider">
+                  Suggested Commute Routes
+                </p>
               </div>
               {routeResult.routes.map((route, idx) => {
                 const isSelected = selectedRouteIndex === idx;
@@ -606,7 +709,9 @@ function MapPageInner() {
                     <button
                       onClick={() => setSelectedRouteIndex(idx)}
                       className={`relative flex items-start justify-between p-4 border-l-4 text-left transition-all ${
-                        isSelected ? "border-l-[#f4b400] bg-[#fffcf5]" : "border-l-transparent bg-white hover:bg-neutral-50"
+                        isSelected
+                          ? "border-l-[#f4b400] bg-[#fffcf5]"
+                          : "border-l-transparent bg-white hover:bg-neutral-50"
                       }`}
                     >
                       <div className="flex flex-col gap-0.5">
@@ -615,32 +720,43 @@ function MapPageInner() {
                             ⭐ Best Route
                           </span>
                         )}
-                        <span className="text-[14px] font-black text-black tracking-tight">{route.legs[0].duration.text}</span>
-                        <span className="text-[11px] font-semibold text-neutral-500 truncate max-w-[200px]">via {route.summary || "Commute Line"}</span>
+                        <span className="text-[14px] font-black text-black tracking-tight">
+                          {route.legs[0].duration.text}
+                        </span>
+                        <span className="text-[11px] font-semibold text-neutral-500 truncate max-w-[200px]">
+                          via {route.summary || "Commute Line"}
+                        </span>
                       </div>
                       <span className="text-[11px] font-bold text-neutral-400 bg-neutral-100 px-2 py-0.5 rounded-md mt-auto mb-auto">
                         {route.legs[0].distance.text}
                       </span>
                     </button>
-                    
+
                     {/* DYNAMIC ROUTE DETAILS */}
                     {isSelected && (
                       <div className="px-5 pb-4 pt-1 bg-[#fffcf5]">
                         <div className="flex flex-col gap-3 pl-3 border-l-2 border-dashed border-[#f4b400] mt-1 relative">
                           <div className="absolute -left-[5px] top-0 w-2 h-2 rounded-full bg-[#f4b400]" />
                           {route.legs[0].steps.map((step, sIdx) => (
-                            <div key={sIdx} className="flex items-start gap-2.5">
+                            <div
+                              key={sIdx}
+                              className="flex items-start gap-2.5"
+                            >
                               <span className="text-[13px] mt-0.5 flex-shrink-0">
                                 {step.travel_mode === "TRANSIT" ? "🚌" : "🚶‍♂️"}
                               </span>
                               <div className="flex flex-col">
-                                <span 
-                                  className="text-[11px] text-neutral-700 font-medium leading-relaxed" 
-                                  dangerouslySetInnerHTML={{ __html: step.instructions }} 
+                                <span
+                                  className="text-[11px] text-neutral-700 font-medium leading-relaxed"
+                                  dangerouslySetInnerHTML={{
+                                    __html: step.instructions,
+                                  }}
                                 />
                                 {step.transit && (
                                   <span className="text-[10px] text-neutral-400 font-semibold mt-0.5">
-                                    {step.transit.line?.short_name || step.transit.line?.name} • {step.transit.num_stops} stops
+                                    {step.transit.line?.short_name ||
+                                      step.transit.line?.name}{" "}
+                                    • {step.transit.num_stops} stops
                                   </span>
                                 )}
                               </div>
@@ -660,32 +776,52 @@ function MapPageInner() {
 
       {/* ─── CENTER: GOOGLE MAPS PANEL ─── */}
       <div className="relative flex-grow h-full z-0">
-        <Map defaultCenter={MANILA_CENTER} defaultZoom={12} disableDefaultUI style={{ width: "100%", height: "100%" }}>
+        <Map
+          defaultCenter={MANILA_CENTER}
+          defaultZoom={12}
+          disableDefaultUI
+          style={{ width: "100%", height: "100%" }}
+        >
           {showRoute && routeResult && (
-            <MultiRouteRenderer 
-              directionsResult={routeResult} 
-              selectedRouteIndex={selectedRouteIndex} 
+            <MultiRouteRenderer
+              directionsResult={routeResult}
+              selectedRouteIndex={selectedRouteIndex}
             />
           )}
         </Map>
 
         {/* Zoom Controls */}
         <div className="absolute bottom-6 left-6 z-20 flex flex-col gap-1 shadow-md rounded-lg overflow-hidden border border-neutral-200">
-          <button onClick={() => map?.setZoom((map.getZoom() ?? 12) + 1)} className="w-9 h-9 bg-white hover:bg-neutral-50 text-black font-black text-md flex items-center justify-center">+</button>
-          <button onClick={() => map?.setZoom((map.getZoom() ?? 12) - 1)} className="w-9 h-9 bg-white hover:bg-neutral-50 text-black font-black text-md border-t border-neutral-100 flex items-center justify-center">−</button>
+          <button
+            onClick={() => map?.setZoom((map.getZoom() ?? 12) + 1)}
+            className="w-9 h-9 bg-white hover:bg-neutral-50 text-black font-black text-md flex items-center justify-center"
+          >
+            +
+          </button>
+          <button
+            onClick={() => map?.setZoom((map.getZoom() ?? 12) - 1)}
+            className="w-9 h-9 bg-white hover:bg-neutral-50 text-black font-black text-md border-t border-neutral-100 flex items-center justify-center"
+          >
+            −
+          </button>
         </div>
       </div>
 
       {/* ─── RIGHT FLOATING PANEL: AI INFERENCES & CHAT ─── */}
       {routeResult && (
         <div className="absolute top-6 right-6 bottom-6 z-10 flex flex-col gap-4 pointer-events-none items-end">
-          
           {/* Minimize/Maximize Controller Button */}
-          <button 
+          <button
             onClick={() => setIsAiMinimized(!isAiMinimized)}
             className="pointer-events-auto bg-white bg-opacity-95 backdrop-blur-md shadow-lg border border-[#ece7dc] rounded-full px-4 py-2 flex items-center gap-2 text-[11px] font-bold text-black hover:bg-neutral-50 transition-all z-20"
           >
-            {isAiMinimized ? "🤖 Show AI Cards" : <><MinimizeIcon /> Minimize AI</>}
+            {isAiMinimized ? (
+              "🤖 Show AI Cards"
+            ) : (
+              <>
+                <MinimizeIcon /> Minimize AI
+              </>
+            )}
           </button>
 
           {!isAiMinimized && (
@@ -695,23 +831,29 @@ function MapPageInner() {
                 <div className="bg-white bg-opacity-95 backdrop-blur-md rounded-2xl border border-[#ece7dc] p-4 shadow-xl flex flex-col gap-2.5 pointer-events-auto transition-all animate-in fade-in slide-in-from-right-4 duration-300">
                   <div className="flex items-center gap-2 pb-1.5 border-b border-neutral-100">
                     <span className="text-xs">⚡</span>
-                    <p className="text-[10px] font-black text-black tracking-wider uppercase">AI Quick Insights</p>
+                    <p className="text-[10px] font-black text-black tracking-wider uppercase">
+                      AI Quick Insights
+                    </p>
                   </div>
                   <div className="flex flex-col gap-2">
-                    <AiInsightRow 
-                      label={arrivalTime ? "Recommended Dep. Time" : "Estimated Dep. Time"} 
-                      value={aiInsights.bestDeparture} 
-                      icon={<ClockIcon />} 
+                    <AiInsightRow
+                      label={
+                        arrivalTime
+                          ? "Recommended Dep. Time"
+                          : "Estimated Dep. Time"
+                      }
+                      value={aiInsights.bestDeparture}
+                      icon={<ClockIcon />}
                     />
-                    <AiInsightRow 
-                      label="Estimated Fare" 
-                      value={aiInsights.fare} 
-                      icon={<WalletIcon />} 
+                    <AiInsightRow
+                      label="Estimated Fare"
+                      value={aiInsights.fare}
+                      icon={<WalletIcon />}
                     />
-                    <AiInsightRow 
-                      label="Primary Transport" 
-                      value={aiInsights.transport} 
-                      icon={<TransportIcon />} 
+                    <AiInsightRow
+                      label="Primary Transport"
+                      value={aiInsights.transport}
+                      icon={<TransportIcon />}
                     />
                   </div>
                 </div>
@@ -723,37 +865,60 @@ function MapPageInner() {
                 <div className="px-4 py-3 bg-black flex items-center justify-between shadow-sm">
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 rounded-full bg-[#f4b400] animate-pulse" />
-                    <span className="text-[11px] font-black text-white tracking-wider uppercase">Komyut AI Guide</span>
+                    <span className="text-[11px] font-black text-white tracking-wider uppercase">
+                      Komyut AI Guide
+                    </span>
                   </div>
                 </div>
 
                 {/* Chat Body */}
-                <div ref={chatContainerRef} className="flex-grow overflow-y-auto p-4 flex flex-col gap-4 custom-scrollbar">
+                <div
+                  ref={chatContainerRef}
+                  className="flex-grow overflow-y-auto p-4 flex flex-col gap-4 custom-scrollbar"
+                >
                   {chatHistory.map((msg) => (
-                    <div key={msg.id} className={`flex w-full ${msg.role === "user" ? "justify-end" : "justify-start"} gap-2`}>
+                    <div
+                      key={msg.id}
+                      className={`flex w-full ${msg.role === "user" ? "justify-end" : "justify-start"} gap-2`}
+                    >
                       {msg.role === "ai" && (
                         <div className="w-6 h-6 rounded-lg bg-black flex items-center justify-center flex-shrink-0 mt-0.5 shadow-sm">
                           <span className="text-[#f4b400] text-[10px]">✨</span>
                         </div>
                       )}
-                      <div className={`p-3 text-[12px] leading-relaxed shadow-sm rounded-xl max-w-[85%] ${
-                        msg.role === "user" ? "bg-[#f4b400] text-black font-semibold rounded-tr-none" : "bg-white border border-[#ece7dc] text-neutral-800 font-medium rounded-tl-none"
-                      }`}>
+                      <div
+                        className={`p-3 text-[12px] leading-relaxed shadow-sm rounded-xl max-w-[85%] ${
+                          msg.role === "user"
+                            ? "bg-[#f4b400] text-black font-semibold rounded-tr-none"
+                            : "bg-white border border-[#ece7dc] text-neutral-800 font-medium rounded-tl-none"
+                        }`}
+                      >
                         {msg.text}
                         {/* Audio puck */}
                         {msg.role === "ai" && (
                           <div className="mt-2 pt-2 border-t border-neutral-50 flex items-center justify-end">
                             {currentlyPlayingId === msg.id ? (
                               <div className="flex items-center gap-1.5">
-                                <button onClick={toggleAudio} className="px-2 py-1 bg-neutral-100 text-black text-[10px] font-bold rounded">
+                                <button
+                                  onClick={toggleAudio}
+                                  className="px-2 py-1 bg-neutral-100 text-black text-[10px] font-bold rounded"
+                                >
                                   {isPaused ? "▶" : "⏸"}
                                 </button>
-                                <button onClick={stopAudio} className="px-2 py-1 bg-red-50 text-red-600 text-[10px] font-bold rounded">
+                                <button
+                                  onClick={stopAudio}
+                                  className="px-2 py-1 bg-red-50 text-red-600 text-[10px] font-bold rounded"
+                                >
                                   ⏹
                                 </button>
                               </div>
                             ) : (
-                              <button onClick={() => playAudio(msg.audioUrl, msg.id, msg.text)} className="flex items-center gap-1 px-2 py-1 bg-[#f8f6f1] text-black text-[10px] font-bold rounded border border-neutral-200">
+                              <button
+                                onClick={() =>
+                                  playAudio(msg.audioUrl, msg.id, msg.text)
+                                }
+                                className="flex items-center gap-1 px-2 py-1 bg-[#f8f6f1] text-black text-[10px] font-bold rounded border border-neutral-200"
+                              >
                                 🔊 <span className="text-[9px]">Listen</span>
                               </button>
                             )}
@@ -762,7 +927,7 @@ function MapPageInner() {
                       </div>
                     </div>
                   ))}
-                  
+
                   {isAiLoading && (
                     <div className="flex gap-2 items-center text-neutral-400 text-[11px] font-bold animate-pulse">
                       <span className="w-4 h-4 border-2 border-[#f4b400] border-t-transparent rounded-full animate-spin" />
@@ -775,7 +940,10 @@ function MapPageInner() {
                 <form
                   onSubmit={(e) => {
                     e.preventDefault();
-                    handleAskAI(chatInput, routeResult?.routes[selectedRouteIndex]);
+                    handleAskAI(
+                      chatInput,
+                      routeResult?.routes[selectedRouteIndex],
+                    );
                   }}
                   className="p-3 border-t border-[#ece7dc] bg-white bg-opacity-80"
                 >
@@ -785,10 +953,20 @@ function MapPageInner() {
                       value={chatInput}
                       onChange={(e) => setChatInput(e.target.value)}
                       disabled={!routeResult}
-                      placeholder={routeResult ? "Ask about traffic, alternative transfers..." : "Search a route first..."}
+                      placeholder={
+                        routeResult
+                          ? "Ask about traffic, alternative transfers..."
+                          : "Search a route first..."
+                      }
                       className="w-full bg-[#f8f6f1] border border-[#ece7dc] pl-3 pr-9 py-2.5 rounded-xl text-[12px] font-medium outline-none focus:border-[#f4b400] transition-colors disabled:opacity-50"
                     />
-                    <button type="submit" disabled={!chatInput.trim() || isAiLoading || !routeResult} className="absolute right-1.5 w-7 h-7 flex items-center justify-center bg-black text-[#f4b400] rounded-lg disabled:opacity-30">
+                    <button
+                      type="submit"
+                      disabled={
+                        !chatInput.trim() || isAiLoading || !routeResult
+                      }
+                      className="absolute right-1.5 w-7 h-7 flex items-center justify-center bg-black text-[#f4b400] rounded-lg disabled:opacity-30"
+                    >
                       ↑
                     </button>
                   </div>
