@@ -2,22 +2,22 @@ function TeamSection() {
   const team = [
     {
       name: "Trinidad",
-      role: "UI/UX & Project Lead",
+      role: "Front End Developer",
     },
 
     {
       name: "Villanueva",
-      role: "Frontend Developer",
+      role: "Front End Developer",
     },
 
     {
       name: "Gecarane",
-      role: "Backend Developer",
+      role: "API Backend Developer",
     },
 
     {
       name: "Gonzales",
-      role: "AI & CRUD Integration",
+      role: "AI Backend Developer",
     },
   ];
 
