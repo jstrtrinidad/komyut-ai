@@ -36,9 +36,14 @@ function Footer() {
           </h3>
 
           <div className="mt-5 space-y-3 text-[#5f6368]">
-            <p>About Us</p>
-            <p>Resources</p>
-            <p>Contact</p>
+            {/* Clickable Links */}
+            <Link to="/about" className="hover:text-[#f4b400] font-semibold block">
+              About Us
+            </Link>
+            <Link to="/faq" className="hover:text-[#f4b400] font-semibold block">
+              Contact
+            </Link>
+          
           </div>
         </div>
 

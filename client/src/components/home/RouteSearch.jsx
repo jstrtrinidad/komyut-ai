@@ -1,16 +1,12 @@
 import { useState } from "react";
-
-import {
-  MapPin,
-  Navigation,
-  Sparkles,
-} from "lucide-react";
-
+import { useNavigate } from "react-router-dom";
+import { MapPin, Navigation, Sparkles } from "lucide-react";
 import useCommuteAI from "../../hooks/useCommuteAI";
 
 function RouteSearch() {
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
+  const navigate = useNavigate();
 
   return (
     <section className="relative z-20 bg-transparent px-6">
@@ -20,10 +16,7 @@ function RouteSearch() {
           <div className="grid items-start gap-5 lg:grid-cols-[1fr_1fr_auto]">
             {/* FROM */}
             <div className="rounded-2xl border border-[#ece7dc] px-5 py-4">
-              <p className="text-sm text-[#5f6368]">
-                From
-              </p>
-
+              <p className="text-sm text-[#5f6368]">From</p>
               <input
                 type="text"
                 value={from}
@@ -35,10 +28,7 @@ function RouteSearch() {
 
             {/* TO */}
             <div className="rounded-2xl border border-[#ece7dc] px-5 py-4">
-              <p className="text-sm text-[#5f6368]">
-                To
-              </p>
-
+              <p className="text-sm text-[#5f6368]">To</p>
               <input
                 type="text"
                 value={to}
@@ -49,27 +39,31 @@ function RouteSearch() {
             </div>
 
             {/* BUTTON */}
-            <button className="h-[72px] rounded-2xl bg-[#f4b400] px-10 text-lg font-semibold text-black transition hover:bg-[#ffca28]">
-            Find Route
+            <button
+              className="h-[72px] rounded-2xl bg-[#f4b400] px-10 text-lg font-semibold text-black transition hover:bg-[#ffca28]"
+              onClick={() => {
+                if (from && to) {
+                  navigate("/map", { state: { from, to } });
+                } else {
+                  alert("Please enter both origin and destination!");
+                }
+              }}
+            >
+              Find Route
             </button>
           </div>
 
           {/* Chips */}
           <div className="mt-8 flex flex-wrap items-center gap-3">
-            <p className="text-sm font-medium text-[#5f6368]">
-              Popular:
-            </p>
-
-            {["Cubao", "Makati", "Pasig", "BGC", "Manila"].map(
-              (place) => (
-                <button
-                  key={place}
-                  className="rounded-full border border-[#ece7dc] px-5 py-2 text-sm font-medium text-[#5f6368] transition hover:bg-[#faf7f2]"
-                >
-                  {place}
-                </button>
-              )
-            )}
+            <p className="text-sm font-medium text-[#5f6368]">Popular:</p>
+            {["Cubao", "Makati", "Pasig", "BGC", "Manila"].map((place) => (
+              <button
+                key={place}
+                className="rounded-full border border-[#ece7dc] px-5 py-2 text-sm font-medium text-[#5f6368] transition hover:bg-[#faf7f2]"
+              >
+                {place}
+              </button>
+            ))}
           </div>
         </div>
       </div>
