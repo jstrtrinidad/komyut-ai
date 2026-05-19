@@ -1,9 +1,26 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom"; // 1. Import useNavigate
 import heroBg from "../../assets/images/hero-background.png";
 
 function Hero() {
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
+  const navigate = useNavigate(); // 2. Initialize it
+
+  // 3. Create the function to handle the search
+  const handleSearch = () => {
+    if (!from || !to) {
+      alert("Please enter both a starting point and destination.");
+      return;
+    }
+    // Navigate to the map page and pass the search data in the state!
+    navigate("/map", { state: { originText: from, destinationText: to } });
+  };
+
+  // 4. Quick helper for the popular buttons
+  const handlePopularClick = (place) => {
+    setTo(place);
+  };
 
   return (
     <section
@@ -52,10 +69,7 @@ function Hero() {
 
               {/* FROM */}
               <div className="rounded-xl border border-[#ece7dc] bg-white px-4 py-3">
-                <p className="text-xs font-medium text-[#5f6368]">
-                  From
-                </p>
-
+                <p className="text-xs font-medium text-[#5f6368]">From</p>
                 <input
                   type="text"
                   value={from}
@@ -67,10 +81,7 @@ function Hero() {
 
               {/* TO */}
               <div className="rounded-xl border border-[#ece7dc] bg-white px-4 py-3">
-                <p className="text-xs font-medium text-[#5f6368]">
-                  To
-                </p>
-
+                <p className="text-xs font-medium text-[#5f6368]">To</p>
                 <input
                   type="text"
                   value={to}
@@ -81,27 +92,26 @@ function Hero() {
               </div>
 
               {/* BUTTON */}
-              <button className="rounded-xl bg-[#f4b400] px-6 py-3 text-sm font-semibold text-black transition hover:bg-[#ffca28]">
+              <button 
+                onClick={handleSearch} // Attach the search function here
+                className="rounded-xl bg-[#f4b400] px-6 py-3 text-sm font-semibold text-black transition hover:bg-[#ffca28]"
+              >
                 Find Route
               </button>
             </div>
 
             {/* Popular */}
             <div className="mt-4 flex flex-wrap items-center gap-2">
-              <p className="text-xs font-medium text-[#5f6368]">
-                Popular:
-              </p>
-
-              {["Cubao", "Makati", "Pasig", "Alabang", "Manila"].map(
-                (place) => (
-                  <button
-                    key={place}
-                    className="rounded-full border border-[#ece7dc] bg-white px-3 py-1.5 text-xs font-medium text-[#5f6368] transition hover:bg-[#faf7f2]"
-                  >
-                    {place}
-                  </button>
-                )
-              )}
+              <p className="text-xs font-medium text-[#5f6368]">Popular:</p>
+              {["Cubao", "Makati", "Pasig", "Alabang", "Manila"].map((place) => (
+                <button
+                  key={place}
+                  onClick={() => handlePopularClick(place)} // Attach click helper
+                  className="rounded-full border border-[#ece7dc] bg-white px-3 py-1.5 text-xs font-medium text-[#5f6368] transition hover:bg-[#faf7f2]"
+                >
+                  {place}
+                </button>
+              ))}
             </div>
           </div>
         </div>
