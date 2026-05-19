@@ -5,15 +5,18 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
+import destinationRoutes from "./routes/destinationRoutes.js";
+import inquiryRoutes from "./routes/inquiryRoutes.js";
 
 dotenv.config();
 
 const app = express();
 
 /* MIDDLEWARE */
-// CRITICAL: Ensure cors allows credentials if your authRoutes use httpOnly cookies!
 app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 app.use(express.json());
+app.use("/uploads", express.static("uploads"));
+app.use("/api/inquiries", inquiryRoutes);
 
 /* TEST ROUTE */
 app.get("/", (req, res) => {
@@ -22,6 +25,8 @@ app.get("/", (req, res) => {
 
 /* AUTH ROUTES */
 app.use("/api/auth", authRoutes);
+
+app.use("/api/destinations", destinationRoutes);
 
 /* --- AI COMMUTE ASSISTANT --- */
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
@@ -38,8 +43,8 @@ function createWavBuffer(
   header.writeUInt32LE(36 + pcmBuffer.length, 4);
   header.write("WAVE", 8);
   header.write("fmt ", 12);
-  header.writeUInt32LE(16, 16); // Subchunk1Size
-  header.writeUInt16LE(1, 20); // AudioFormat
+  header.writeUInt32LE(16, 16);
+  header.writeUInt16LE(1, 20);
   header.writeUInt16LE(numChannels, 22);
   header.writeUInt32LE(sampleRate, 24);
   header.writeUInt32LE(sampleRate * numChannels * (bitDepth / 8), 28);
@@ -144,7 +149,7 @@ app.post("/api/ai/commute-info", async (req, res) => {
 });
 
 /* PORT */
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.PORT || 5000;
 
 /* START SERVER */
 const startServer = async () => {

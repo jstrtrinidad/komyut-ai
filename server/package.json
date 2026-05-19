@@ -7,12 +7,14 @@
     "dev": "nodemon index.js"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "bcryptjs": "^3.0.3",
     "cors": "^2.8.5",
     "dotenv": "^17.2.0",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.24.0",
+    "multer": "^2.1.1",
     "nodemailer": "^7.0.5"
   },
   "devDependencies": {
