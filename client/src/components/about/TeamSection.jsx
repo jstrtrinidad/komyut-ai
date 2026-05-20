@@ -1,25 +1,29 @@
 function TeamSection() {
   const team = [
-    {
-      name: "Trinidad",
-      role: "Front End Developer",
-    },
+  {
+    name: "Trinidad",
+    role: "Front End Developer",
+    image: "/team/jester.png",
+  },
 
-    {
-      name: "Villanueva",
-      role: "Front End Developer",
-    },
+  {
+    name: "Villanueva",
+    role: "Front End Developer",
+    image: "/team/lewis.jpg",
+  },
 
-    {
-      name: "Gecarane",
-      role: "API Backend Developer",
-    },
+  {
+    name: "Gecarane",
+    role: "API Backend Developer",
+    image: "/team/jm.jpeg",
+  },
 
-    {
-      name: "Gonzales",
-      role: "AI Backend Developer",
-    },
-  ];
+  {
+    name: "Gonzales",
+    role: "AI Backend Developer",
+    image: "/team/noel.jpg",
+  },
+];
 
   return (
     <section className="bg-white px-6 py-24">
@@ -43,9 +47,11 @@ function TeamSection() {
               key={index}
               className="rounded-[32px] border border-[#ece7dc] bg-[#f8f6f1] p-10 text-center transition hover:-translate-y-1"
             >
-              <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-[#f4b400] text-3xl font-black text-black">
-                {member.name.charAt(0)}
-              </div>
+              <img
+                src={member.image}
+                alt={member.name}
+                className="mx-auto h-28 w-28 rounded-full object-cover border-4 border-white shadow-lg"
+              />
 
               <h3 className="mt-8 text-2xl font-black text-black">
                 {member.name}
