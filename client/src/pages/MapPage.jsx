@@ -8,21 +8,51 @@ const MANILA_CENTER = { lat: 14.5995, lng: 120.9842 };
 
 // ─── SVG Icons para sa AI Cards ───────────────────────────────────────────────
 const ClockIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
     <circle cx="12" cy="12" r="10"></circle>
     <polyline points="12 6 12 12 16 14"></polyline>
   </svg>
 );
 
 const WalletIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
     <rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect>
     <line x1="12" y1="20" x2="12" y2="4"></line>
   </svg>
 );
 
 const TransportIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
     <rect x="4" y="3" width="16" height="16" rx="2" ry="2"></rect>
     <path d="M4 11h16"></path>
     <path d="M12 3v8"></path>
@@ -34,7 +64,17 @@ const TransportIcon = () => (
 );
 
 const MinimizeIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
     <polyline points="4 14 12 22 20 14"></polyline>
     <polyline points="4 2 12 10 20 2"></polyline>
   </svg>
@@ -45,8 +85,15 @@ function AiInsightRow({ label, value, icon }) {
   return (
     <div className="flex items-center justify-between p-2.5 bg-white bg-opacity-70 rounded-xl border border-neutral-100 shadow-sm">
       <div className="flex flex-col gap-0.5 flex-grow min-w-0">
-        <span className="text-[10px] text-neutral-400 font-bold uppercase tracking-wider">{label}</span>
-        <span className="text-[12px] font-black text-black leading-tight break-words pr-1" title={value}>{value}</span>
+        <span className="text-[10px] text-neutral-400 font-bold uppercase tracking-wider">
+          {label}
+        </span>
+        <span
+          className="text-[12px] font-black text-black leading-tight break-words pr-1"
+          title={value}
+        >
+          {value}
+        </span>
       </div>
       <div className="w-8 h-8 rounded-xl bg-[#fff8e6] text-[#f4b400] flex items-center justify-center flex-shrink-0 ml-2">
         {icon}
@@ -83,7 +130,7 @@ function PlaceInput({ placeholder, onPlaceSelect, initialValue = "" }) {
               north: 14.7877,
               south: 14.3466,
               east: 121.1338,
-              west: 120.9300,
+              west: 120.93,
             },
           });
         setSuggestions(results ?? []);
@@ -171,7 +218,7 @@ function MultiRouteRenderer({ directionsResult, selectedRouteIndex }) {
 
     renderersRef.current = directionsResult.routes.map((_, idx) => {
       const isSelected = idx === selectedRouteIndex;
-     
+
       const renderer = new routesLib.DirectionsRenderer({
         map,
         directions: directionsResult,
@@ -185,7 +232,7 @@ function MultiRouteRenderer({ directionsResult, selectedRouteIndex }) {
           zIndex: isSelected ? 100 : 10,
         },
       });
-     
+
       return renderer;
     });
 
@@ -205,11 +252,11 @@ function TrafficLayerComponent({ show }) {
 
   useEffect(() => {
     if (!map) return;
-   
+
     if (!trafficLayerRef.current) {
       trafficLayerRef.current = new window.google.maps.TrafficLayer();
     }
-   
+
     if (show) {
       trafficLayerRef.current.setMap(map);
     } else {
@@ -253,31 +300,32 @@ function MapPage() {
   const [currentlyPlayingId, setCurrentlyPlayingId] = useState(null);
   const [isPaused, setIsPaused] = useState(false);
   const [isAiMinimized, setIsAiMinimized] = useState(() =>
-    typeof window !== "undefined" ? window.innerWidth < 768 : false
+    typeof window !== "undefined" ? window.innerWidth < 768 : false,
   );
 
   const canSearch = !!origin && !!destination;
 
   // ─── AI Chat Fetch Handler ───
-  const handleAskAI = useCallback(async (customPrompt, contextRoute = null) => {
-    if (!customPrompt.trim()) return;
+  const handleAskAI = useCallback(
+    async (customPrompt, contextRoute = null) => {
+      if (!customPrompt.trim()) return;
 
-    setChatHistory((prev) => [
-      ...prev,
-      { id: Date.now().toString(), role: "user", text: customPrompt },
-    ]);
-    setChatInput("");
-    setIsAiLoading(true);
-    setIsAiMinimized(false);
+      setChatHistory((prev) => [
+        ...prev,
+        { id: Date.now().toString(), role: "user", text: customPrompt },
+      ]);
+      setChatInput("");
+      setIsAiLoading(true);
+      setIsAiMinimized(false);
 
-    let routeContextText = "";
-    if (contextRoute) {
-      const leg = contextRoute.legs[0];
-      const cleanSteps = leg.steps
-        .map((s) => s.instructions.replace(/<[^>]*>?/gm, ""))
-        .join(" -> ");
+      let routeContextText = "";
+      if (contextRoute) {
+        const leg = contextRoute.legs[0];
+        const cleanSteps = leg.steps
+          .map((s) => s.instructions.replace(/<[^>]*>?/gm, ""))
+          .join(" -> ");
 
-      routeContextText = `
+        routeContextText = `
         MAPS ROUTE DATA:
         Mode: TRANSIT (Commute)
         Distance: ${leg.distance.text}
@@ -285,70 +333,61 @@ function MapPage() {
         Summary: ${contextRoute.summary || "Transit Route"}
         Steps: ${cleanSteps}
       `;
-    }
-
-    try {
-<<<<<<< HEAD
-      const response = await fetch(
-        "http://localhost:5000/api/ai/commute-info",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            prompt: customPrompt,
-            origin: origin?.name || origin?.address,
-            destination: destination?.name || destination?.address,
-            routeContext: routeContextText,
-          }),
-        },
-      );
-=======
-      const response = await fetch("http://localhost:5000/api/ai/commute-info", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          prompt: customPrompt,
-          origin: origin?.name || origin?.address,
-          destination: destination?.name || destination?.address,
-          routeContext: routeContextText,
-        }),
-      });
->>>>>>> 72892e1adf728e51105c822c134a07223aebfa6b
-      const data = await response.json();
-
-      let audioUrl = null;
-      if (data.audioData) {
-        const binaryString = window.atob(data.audioData);
-        const bytes = new Uint8Array(binaryString.length);
-        for (let i = 0; i < binaryString.length; i++) {
-          bytes[i] = binaryString.charCodeAt(i);
-        }
-        const blob = new Blob([bytes], { type: data.mimeType || "audio/wav" });
-        audioUrl = URL.createObjectURL(blob);
       }
 
-      setChatHistory((prev) => [
-        ...prev,
-        {
-          id: Date.now().toString(),
-          role: "ai",
-          text: data.text || "Analysis complete.",
-          audioUrl: audioUrl,
-        },
-      ]);
-    } catch (err) {
-      setChatHistory((prev) => [
-        ...prev,
-        {
-          id: Date.now().toString(),
-          role: "ai",
-          text: "Error connecting to AI.",
-        },
-      ]);
-    } finally {
-      setIsAiLoading(false);
-    }
-  }, [origin, destination]);
+      try {
+        const response = await fetch(
+          "http://localhost:5000/api/ai/commute-info",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              prompt: customPrompt,
+              origin: origin?.name || origin?.address,
+              destination: destination?.name || destination?.address,
+              routeContext: routeContextText,
+            }),
+          },
+        );
+        const data = await response.json();
+
+        let audioUrl = null;
+        if (data.audioData) {
+          const binaryString = window.atob(data.audioData);
+          const bytes = new Uint8Array(binaryString.length);
+          for (let i = 0; i < binaryString.length; i++) {
+            bytes[i] = binaryString.charCodeAt(i);
+          }
+          const blob = new Blob([bytes], {
+            type: data.mimeType || "audio/wav",
+          });
+          audioUrl = URL.createObjectURL(blob);
+        }
+
+        setChatHistory((prev) => [
+          ...prev,
+          {
+            id: Date.now().toString(),
+            role: "ai",
+            text: data.text || "Analysis complete.",
+            audioUrl: audioUrl,
+          },
+        ]);
+      } catch (err) {
+        setChatHistory((prev) => [
+          ...prev,
+          {
+            id: Date.now().toString(),
+            role: "ai",
+            text: "Error connecting to AI.",
+          },
+        ]);
+      } finally {
+        setIsAiLoading(false);
+      }
+    },
+    [origin, destination],
+  );
 
   // ─── Fetch Directions ───
   const handleFindRoute = useCallback(() => {
@@ -362,7 +401,10 @@ function MapPage() {
 
     const service = new routesLib.DirectionsService();
 
-    let transitOpts = { modes: ["BUS", "RAIL", "SUBWAY", "TRAM"], routingPreference: "FEWER_TRANSFERS" };
+    let transitOpts = {
+      modes: ["BUS", "RAIL", "SUBWAY", "TRAM"],
+      routingPreference: "FEWER_TRANSFERS",
+    };
     if (arrivalTime) {
       const targetTime = new Date();
       const [hours, minutes] = arrivalTime.split(":");
@@ -397,14 +439,28 @@ function MapPage() {
           console.warn("Transit route request failed due to " + status);
           setShowRoute(false);
         }
-      }
+      },
     );
-  }, [canSearch, routesLib, arrivalTime, origin, destination, map, handleAskAI]);
+  }, [
+    canSearch,
+    routesLib,
+    arrivalTime,
+    origin,
+    destination,
+    map,
+    handleAskAI,
+  ]);
 
   // ─── Auto-fill from location state ───
   useEffect(() => {
     const state = location.state;
-    if (state?.originText && state?.destinationText && geocodingLib && routesLib && !hasAutoRouted.current) {
+    if (
+      state?.originText &&
+      state?.destinationText &&
+      geocodingLib &&
+      routesLib &&
+      !hasAutoRouted.current
+    ) {
       setInitialOriginText(state.originText);
       setInitialDestinationText(state.destinationText);
 
@@ -427,26 +483,33 @@ function MapPage() {
                 console.warn(`Geocode failed for ${text}: ${status}`);
                 resolve(null);
               }
-            }
+            },
           );
         });
       };
 
-      Promise.all([geocode(state.originText), geocode(state.destinationText)]).then(
-        ([o, d]) => {
-          if (o && d) {
-            setOrigin(o);
-            setDestination(d);
-            hasAutoRouted.current = true;
-          }
+      Promise.all([
+        geocode(state.originText),
+        geocode(state.destinationText),
+      ]).then(([o, d]) => {
+        if (o && d) {
+          setOrigin(o);
+          setDestination(d);
+          hasAutoRouted.current = true;
         }
-      );
+      });
     }
   }, [location.state, geocodingLib, routesLib]);
 
   // ─── Auto-route trigger ───
   useEffect(() => {
-    if (hasAutoRouted.current && origin && destination && !routeResult && !isSearching) {
+    if (
+      hasAutoRouted.current &&
+      origin &&
+      destination &&
+      !routeResult &&
+      !isSearching
+    ) {
       handleFindRoute();
     }
   }, [origin, destination, routeResult, isSearching, handleFindRoute]);
@@ -471,23 +534,35 @@ function MapPage() {
       if (arrivalTime) {
         const [hours, minutes] = arrivalTime.split(":");
         targetTime.setHours(parseInt(hours, 10), parseInt(minutes, 10), 0, 0);
-        const depTime = new Date(targetTime.getTime() - (durationInSeconds * 1000) - (10 * 60000));
-        bestTime = depTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const depTime = new Date(
+          targetTime.getTime() - durationInSeconds * 1000 - 10 * 60000,
+        );
+        bestTime = depTime.toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
       }
     }
 
-    const transitSteps = leg.steps.filter(step => step.travel_mode === "TRANSIT");
+    const transitSteps = leg.steps.filter(
+      (step) => step.travel_mode === "TRANSIT",
+    );
     let transportMode = "Lakad Lamang";
     let estimatedFareText = "₱0.00 (Walk)";
 
     if (transitSteps.length > 0) {
-      const lines = transitSteps.map(step => {
-        return step.transit?.line?.short_name || step.transit?.line?.name || "Transit";
+      const lines = transitSteps.map((step) => {
+        return (
+          step.transit?.line?.short_name ||
+          step.transit?.line?.name ||
+          "Transit"
+        );
       });
-      transportMode = lines.slice(0, 3).join(" ➔ ") + (lines.length > 3 ? "..." : "");
+      transportMode =
+        lines.slice(0, 3).join(" ➔ ") + (lines.length > 3 ? "..." : "");
 
       let fareBreakdown = {};
-      transitSteps.forEach(step => {
+      transitSteps.forEach((step) => {
         const type = step.transit?.line?.vehicle?.type || "";
         const name = (step.transit?.line?.name || "").toUpperCase();
         const shortName = (step.transit?.line?.short_name || "").toUpperCase();
@@ -496,17 +571,29 @@ function MapPage() {
         let modeKey = "Jeep/UV";
         let stepFare = 15;
 
-        if (type === "BUS" || name.includes("BUS") || shortName.includes("BUS")) {
+        if (
+          type === "BUS" ||
+          name.includes("BUS") ||
+          shortName.includes("BUS")
+        ) {
           modeKey = "Bus";
           stepFare = 15 + Math.round(distanceKm * 2.1);
         } else if (
-          type === "RAIL" || type === "SUBWAY" || type === "HEAVY_RAIL" ||
-          name.includes("LRT") || name.includes("MRT") || name.includes("METRO") ||
-          shortName.includes("LRT") || shortName.includes("MRT")
+          type === "RAIL" ||
+          type === "SUBWAY" ||
+          type === "HEAVY_RAIL" ||
+          name.includes("LRT") ||
+          name.includes("MRT") ||
+          name.includes("METRO") ||
+          shortName.includes("LRT") ||
+          shortName.includes("MRT")
         ) {
-          if (name.includes("LRT 1") || shortName.includes("L1")) modeKey = "LRT-1";
-          else if (name.includes("LRT 2") || shortName.includes("L2")) modeKey = "LRT-2";
-          else if (name.includes("MRT 3") || shortName.includes("M3")) modeKey = "MRT-3";
+          if (name.includes("LRT 1") || shortName.includes("L1"))
+            modeKey = "LRT-1";
+          else if (name.includes("LRT 2") || shortName.includes("L2"))
+            modeKey = "LRT-2";
+          else if (name.includes("MRT 3") || shortName.includes("M3"))
+            modeKey = "MRT-3";
           else modeKey = "Tren";
           stepFare = 15 + Math.round(distanceKm * 1.6);
         } else {
@@ -528,14 +615,15 @@ function MapPage() {
     setAiInsights({
       bestDeparture: bestTime,
       fare: estimatedFareText,
-      transport: transportMode
+      transport: transportMode,
     });
   }, [routeResult, arrivalTime, selectedRouteIndex]);
 
   // ─── Scroll Chat ───
   useEffect(() => {
     if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+      chatContainerRef.current.scrollTop =
+        chatContainerRef.current.scrollHeight;
     }
   }, [chatHistory, isAiLoading, isAiMinimized]);
 
@@ -545,25 +633,42 @@ function MapPage() {
     if (url) {
       const audio = new Audio(url);
       audioRef.current = audio;
-      audio.onplay = () => { setCurrentlyPlayingId(id); setIsPaused(false); };
+      audio.onplay = () => {
+        setCurrentlyPlayingId(id);
+        setIsPaused(false);
+      };
       audio.onpause = () => setIsPaused(true);
-      audio.onended = () => { setCurrentlyPlayingId(null); setIsPaused(false); };
+      audio.onended = () => {
+        setCurrentlyPlayingId(null);
+        setIsPaused(false);
+      };
       audio.play().catch((e) => console.error("Playback failed:", e));
     } else if ("speechSynthesis" in window && text) {
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.rate = 1.0;
-      utterance.onstart = () => { setCurrentlyPlayingId(id); setIsPaused(false); };
+      utterance.onstart = () => {
+        setCurrentlyPlayingId(id);
+        setIsPaused(false);
+      };
       utterance.onpause = () => setIsPaused(true);
       utterance.onresume = () => setIsPaused(false);
-      utterance.onend = () => { setCurrentlyPlayingId(null); setIsPaused(false); };
-      utterance.onerror = () => { setCurrentlyPlayingId(null); setIsPaused(false); };
+      utterance.onend = () => {
+        setCurrentlyPlayingId(null);
+        setIsPaused(false);
+      };
+      utterance.onerror = () => {
+        setCurrentlyPlayingId(null);
+        setIsPaused(false);
+      };
       window.speechSynthesis.speak(utterance);
     }
   };
 
   const toggleAudio = () => {
     if (audioRef.current) {
-      audioRef.current.paused ? audioRef.current.play() : audioRef.current.pause();
+      audioRef.current.paused
+        ? audioRef.current.play()
+        : audioRef.current.pause();
     } else if ("speechSynthesis" in window) {
       if (window.speechSynthesis.paused) window.speechSynthesis.resume();
       else if (window.speechSynthesis.speaking) window.speechSynthesis.pause();
@@ -586,7 +691,12 @@ function MapPage() {
       <Navbar />
 
       <div className="relative flex-grow w-full h-[calc(100vh-72px)] overflow-hidden">
-        <Map defaultCenter={MANILA_CENTER} defaultZoom={12} disableDefaultUI style={{ width: "100%", height: "100%" }}>
+        <Map
+          defaultCenter={MANILA_CENTER}
+          defaultZoom={12}
+          disableDefaultUI
+          style={{ width: "100%", height: "100%" }}
+        >
           <TrafficLayerComponent show={showTraffic} />
           {showRoute && routeResult && (
             <MultiRouteRenderer
@@ -598,12 +708,19 @@ function MapPage() {
 
         <div className="absolute top-4 left-4 right-4 z-10 w-[calc(100%-2rem)] md:w-[360px] md:top-6 md:left-6 md:right-auto flex flex-col bg-white shadow-2xl border border-[#ece7dc] rounded-[24px] max-h-[50vh] md:max-h-[calc(100%-120px)] overflow-hidden pointer-events-auto">
           <div className="p-4 flex items-center justify-between border-b border-[#ece7dc] bg-[#faf7f2]">
-            <span className="text-[12px] font-black uppercase tracking-widest text-black">Route Search</span>
+            <span className="text-[12px] font-black uppercase tracking-widest text-black">
+              Route Search
+            </span>
             <button
               onClick={() => {
-                setOrigin(null); setDestination(null); setArrivalTime("");
-                setRouteResult(null); setShowRoute(false); setChatHistory([]);
-                setClearKey((k) => k + 1); stopAudio();
+                setOrigin(null);
+                setDestination(null);
+                setArrivalTime("");
+                setRouteResult(null);
+                setShowRoute(false);
+                setChatHistory([]);
+                setClearKey((k) => k + 1);
+                stopAudio();
               }}
               className="text-[11px] font-bold text-neutral-400 hover:text-black transition-colors px-2 py-1 rounded-md hover:bg-white"
             >
@@ -621,7 +738,10 @@ function MapPage() {
                     key={`from-${clearKey}`}
                     placeholder="Mula saan?"
                     initialValue={initialOriginText}
-                    onPlaceSelect={(p) => { setOrigin(p); setShowRoute(false); }}
+                    onPlaceSelect={(p) => {
+                      setOrigin(p);
+                      setShowRoute(false);
+                    }}
                   />
                 </div>
               </div>
@@ -632,7 +752,10 @@ function MapPage() {
                     key={`to-${clearKey}`}
                     placeholder="Papunta saan?"
                     initialValue={initialDestinationText}
-                    onPlaceSelect={(p) => { setDestination(p); setShowRoute(false); }}
+                    onPlaceSelect={(p) => {
+                      setDestination(p);
+                      setShowRoute(false);
+                    }}
                   />
                 </div>
               </div>
@@ -640,7 +763,9 @@ function MapPage() {
 
             <div className="flex items-center justify-between gap-3 mt-1">
               <div className="flex items-center gap-2 px-4 py-2 bg-[#f8f6f1] border border-[#ece7dc] rounded-xl focus-within:border-[#f4b400] transition-colors flex-grow">
-                <span className="text-[11px] font-bold text-neutral-400 whitespace-nowrap">🏁 Arrive By</span>
+                <span className="text-[11px] font-bold text-neutral-400 whitespace-nowrap">
+                  🏁 Arrive By
+                </span>
                 <input
                   type="time"
                   value={arrivalTime}
@@ -662,19 +787,27 @@ function MapPage() {
             {isSearching && (
               <div className="p-10 flex flex-col items-center justify-center gap-2 text-center">
                 <div className="w-6 h-6 border-2 border-[#f4b400] border-t-transparent rounded-full animate-spin" />
-                <p className="text-[12px] text-neutral-400 font-bold">Naghahanap ng best commute option...</p>
+                <p className="text-[12px] text-neutral-400 font-bold">
+                  Naghahanap ng best commute option...
+                </p>
               </div>
             )}
             {!routeResult && !isSearching && (
               <div className="h-64 flex flex-col items-center justify-center p-6 text-center opacity-50">
                 <span className="text-2xl mb-2">🚌</span>
-                <p className="text-[11px] font-bold text-neutral-500">I-type ang lokasyon para makita<br />ang mga suhestiyong ruta.</p>
+                <p className="text-[11px] font-bold text-neutral-500">
+                  I-type ang lokasyon para makita
+                  <br />
+                  ang mga suhestiyong ruta.
+                </p>
               </div>
             )}
             {routeResult && (
               <div className="flex flex-col divide-y divide-neutral-100">
                 <div className="p-4 bg-[#f8f6f1] border-b border-[#ece7dc]">
-                  <p className="text-[10px] font-black text-neutral-400 uppercase tracking-wider">Suggested Commute Routes</p>
+                  <p className="text-[10px] font-black text-neutral-400 uppercase tracking-wider">
+                    Suggested Commute Routes
+                  </p>
                 </div>
                 {routeResult.routes.map((route, idx) => {
                   const isSelected = selectedRouteIndex === idx;
@@ -683,13 +816,23 @@ function MapPage() {
                       <button
                         onClick={() => setSelectedRouteIndex(idx)}
                         className={`relative flex items-start justify-between p-4 border-l-4 text-left transition-all ${
-                          isSelected ? "border-l-[#f4b400] bg-[#fffcf5]" : "border-l-transparent bg-white hover:bg-neutral-50"
+                          isSelected
+                            ? "border-l-[#f4b400] bg-[#fffcf5]"
+                            : "border-l-transparent bg-white hover:bg-neutral-50"
                         }`}
                       >
                         <div className="flex flex-col gap-0.5">
-                          {idx === 0 && <span className="text-[9px] font-black text-[#f4b400] tracking-wider mb-1 uppercase flex items-center gap-1">⭐ Best Route</span>}
-                          <span className="text-[14px] font-black text-black tracking-tight">{route.legs[0].duration.text}</span>
-                          <span className="text-[11px] font-semibold text-neutral-500 truncate max-w-[200px]">via {route.summary || "Commute Line"}</span>
+                          {idx === 0 && (
+                            <span className="text-[9px] font-black text-[#f4b400] tracking-wider mb-1 uppercase flex items-center gap-1">
+                              ⭐ Best Route
+                            </span>
+                          )}
+                          <span className="text-[14px] font-black text-black tracking-tight">
+                            {route.legs[0].duration.text}
+                          </span>
+                          <span className="text-[11px] font-semibold text-neutral-500 truncate max-w-[200px]">
+                            via {route.summary || "Commute Line"}
+                          </span>
                         </div>
                         <span className="text-[11px] font-bold text-neutral-400 bg-neutral-100 px-2 py-0.5 rounded-md mt-auto mb-auto">
                           {route.legs[0].distance.text}
@@ -700,13 +843,25 @@ function MapPage() {
                           <div className="flex flex-col gap-3 pl-3 border-l-2 border-dashed border-[#f4b400] mt-1 relative">
                             <div className="absolute -left-[5px] top-0 w-2 h-2 rounded-full bg-[#f4b400]" />
                             {route.legs[0].steps.map((step, sIdx) => (
-                              <div key={sIdx} className="flex items-start gap-2.5">
-                                <span className="text-[13px] mt-0.5 flex-shrink-0">{step.travel_mode === "TRANSIT" ? "🚌" : "🚶‍♂️"}</span>
+                              <div
+                                key={sIdx}
+                                className="flex items-start gap-2.5"
+                              >
+                                <span className="text-[13px] mt-0.5 flex-shrink-0">
+                                  {step.travel_mode === "TRANSIT" ? "🚌" : "🚶‍♂️"}
+                                </span>
                                 <div className="flex flex-col">
-                                  <span className="text-[11px] text-neutral-700 font-medium leading-relaxed" dangerouslySetInnerHTML={{ __html: step.instructions }} />
+                                  <span
+                                    className="text-[11px] text-neutral-700 font-medium leading-relaxed"
+                                    dangerouslySetInnerHTML={{
+                                      __html: step.instructions,
+                                    }}
+                                  />
                                   {step.transit && (
                                     <span className="text-[10px] text-neutral-400 font-semibold mt-0.5">
-                                      {step.transit.line?.short_name || step.transit.line?.name} • {step.transit.num_stops} stops
+                                      {step.transit.line?.short_name ||
+                                        step.transit.line?.name}{" "}
+                                      • {step.transit.num_stops} stops
                                     </span>
                                   )}
                                 </div>
@@ -728,14 +883,26 @@ function MapPage() {
           <button
             onClick={() => setShowTraffic(!showTraffic)}
             className={`w-9 h-9 flex items-center justify-center font-black text-md transition-colors border-b border-neutral-100 ${
-              showTraffic ? 'bg-[#fffcf5] text-[#f4b400]' : 'bg-white hover:bg-neutral-50 text-neutral-500'
+              showTraffic
+                ? "bg-[#fffcf5] text-[#f4b400]"
+                : "bg-white hover:bg-neutral-50 text-neutral-500"
             }`}
             title="Toggle Traffic"
           >
             🚦
           </button>
-          <button onClick={() => map?.setZoom((map.getZoom() ?? 12) + 1)} className="w-9 h-9 bg-white hover:bg-neutral-50 text-black font-black text-md flex items-center justify-center">+</button>
-          <button onClick={() => map?.setZoom((map.getZoom() ?? 12) - 1)} className="w-9 h-9 bg-white hover:bg-neutral-50 text-black font-black text-md border-t border-neutral-100 flex items-center justify-center">−</button>
+          <button
+            onClick={() => map?.setZoom((map.getZoom() ?? 12) + 1)}
+            className="w-9 h-9 bg-white hover:bg-neutral-50 text-black font-black text-md flex items-center justify-center"
+          >
+            +
+          </button>
+          <button
+            onClick={() => map?.setZoom((map.getZoom() ?? 12) - 1)}
+            className="w-9 h-9 bg-white hover:bg-neutral-50 text-black font-black text-md border-t border-neutral-100 flex items-center justify-center"
+          >
+            −
+          </button>
         </div>
 
         {routeResult && (
@@ -744,7 +911,13 @@ function MapPage() {
               onClick={() => setIsAiMinimized(!isAiMinimized)}
               className="pointer-events-auto bg-white bg-opacity-95 backdrop-blur-md shadow-lg border border-[#ece7dc] rounded-full px-4 py-2 flex items-center gap-2 text-[11px] font-bold text-black hover:bg-neutral-50 transition-all z-20"
             >
-              {isAiMinimized ? "🤖 Show AI Cards" : <><MinimizeIcon /> Minimize AI</>}
+              {isAiMinimized ? (
+                "🤖 Show AI Cards"
+              ) : (
+                <>
+                  <MinimizeIcon /> Minimize AI
+                </>
+              )}
             </button>
 
             {!isAiMinimized && (
@@ -753,12 +926,30 @@ function MapPage() {
                   <div className="bg-white bg-opacity-95 backdrop-blur-md rounded-2xl border border-[#ece7dc] p-4 shadow-xl flex flex-col gap-2.5 pointer-events-auto transition-all animate-in fade-in slide-in-from-right-4 duration-300">
                     <div className="flex items-center gap-2 pb-1.5 border-b border-neutral-100">
                       <span className="text-xs">⚡</span>
-                      <p className="text-[10px] font-black text-black tracking-wider uppercase">AI Quick Insights</p>
+                      <p className="text-[10px] font-black text-black tracking-wider uppercase">
+                        AI Quick Insights
+                      </p>
                     </div>
                     <div className="flex flex-col gap-2">
-                      <AiInsightRow label={arrivalTime ? "Recommended Dep. Time" : "Estimated Dep. Time"} value={aiInsights.bestDeparture} icon={<ClockIcon />} />
-                      <AiInsightRow label="Estimated Fare" value={aiInsights.fare} icon={<WalletIcon />} />
-                      <AiInsightRow label="Primary Transport" value={aiInsights.transport} icon={<TransportIcon />} />
+                      <AiInsightRow
+                        label={
+                          arrivalTime
+                            ? "Recommended Dep. Time"
+                            : "Estimated Dep. Time"
+                        }
+                        value={aiInsights.bestDeparture}
+                        icon={<ClockIcon />}
+                      />
+                      <AiInsightRow
+                        label="Estimated Fare"
+                        value={aiInsights.fare}
+                        icon={<WalletIcon />}
+                      />
+                      <AiInsightRow
+                        label="Primary Transport"
+                        value={aiInsights.transport}
+                        icon={<TransportIcon />}
+                      />
                     </div>
                   </div>
                 )}
@@ -767,31 +958,60 @@ function MapPage() {
                   <div className="px-4 py-3 bg-black flex items-center justify-between shadow-sm">
                     <div className="flex items-center gap-2">
                       <div className="w-2 h-2 rounded-full bg-[#f4b400] animate-pulse" />
-                      <span className="text-[11px] font-black text-white tracking-wider uppercase">Komyut AI Guide</span>
+                      <span className="text-[11px] font-black text-white tracking-wider uppercase">
+                        Komyut AI Guide
+                      </span>
                     </div>
                   </div>
 
-                  <div ref={chatContainerRef} className="flex-grow overflow-y-auto p-4 flex flex-col gap-4 custom-scrollbar">
+                  <div
+                    ref={chatContainerRef}
+                    className="flex-grow overflow-y-auto p-4 flex flex-col gap-4 custom-scrollbar"
+                  >
                     {chatHistory.map((msg) => (
-                      <div key={msg.id} className={`flex w-full ${msg.role === "user" ? "justify-end" : "justify-start"} gap-2`}>
+                      <div
+                        key={msg.id}
+                        className={`flex w-full ${msg.role === "user" ? "justify-end" : "justify-start"} gap-2`}
+                      >
                         {msg.role === "ai" && (
                           <div className="w-6 h-6 rounded-lg bg-black flex items-center justify-center flex-shrink-0 mt-0.5 shadow-sm">
-                            <span className="text-[#f4b400] text-[10px]">✨</span>
+                            <span className="text-[#f4b400] text-[10px]">
+                              ✨
+                            </span>
                           </div>
                         )}
-                        <div className={`p-3 text-[12px] leading-relaxed shadow-sm rounded-xl max-w-[85%] ${
-                          msg.role === "user" ? "bg-[#f4b400] text-black font-semibold rounded-tr-none" : "bg-white border border-[#ece7dc] text-neutral-800 font-medium rounded-tl-none"
-                        }`}>
+                        <div
+                          className={`p-3 text-[12px] leading-relaxed shadow-sm rounded-xl max-w-[85%] ${
+                            msg.role === "user"
+                              ? "bg-[#f4b400] text-black font-semibold rounded-tr-none"
+                              : "bg-white border border-[#ece7dc] text-neutral-800 font-medium rounded-tl-none"
+                          }`}
+                        >
                           {msg.text}
                           {msg.role === "ai" && (
                             <div className="mt-2 pt-2 border-t border-neutral-50 flex items-center justify-end">
                               {currentlyPlayingId === msg.id ? (
                                 <div className="flex items-center gap-1.5">
-                                  <button onClick={toggleAudio} className="px-2 py-1 bg-neutral-100 text-black text-[10px] font-bold rounded">{isPaused ? "▶" : "⏸"}</button>
-                                  <button onClick={stopAudio} className="px-2 py-1 bg-red-50 text-red-600 text-[10px] font-bold rounded">⏹</button>
+                                  <button
+                                    onClick={toggleAudio}
+                                    className="px-2 py-1 bg-neutral-100 text-black text-[10px] font-bold rounded"
+                                  >
+                                    {isPaused ? "▶" : "⏸"}
+                                  </button>
+                                  <button
+                                    onClick={stopAudio}
+                                    className="px-2 py-1 bg-red-50 text-red-600 text-[10px] font-bold rounded"
+                                  >
+                                    ⏹
+                                  </button>
                                 </div>
                               ) : (
-                                <button onClick={() => playAudio(msg.audioUrl, msg.id, msg.text)} className="flex items-center gap-1 px-2 py-1 bg-[#f8f6f1] text-black text-[10px] font-bold rounded border border-neutral-200">
+                                <button
+                                  onClick={() =>
+                                    playAudio(msg.audioUrl, msg.id, msg.text)
+                                  }
+                                  className="flex items-center gap-1 px-2 py-1 bg-[#f8f6f1] text-black text-[10px] font-bold rounded border border-neutral-200"
+                                >
                                   🔊 <span className="text-[9px]">Listen</span>
                                 </button>
                               )}
@@ -811,7 +1031,10 @@ function MapPage() {
                   <form
                     onSubmit={(e) => {
                       e.preventDefault();
-                      handleAskAI(chatInput, routeResult?.routes[selectedRouteIndex]);
+                      handleAskAI(
+                        chatInput,
+                        routeResult?.routes[selectedRouteIndex],
+                      );
                     }}
                     className="p-3 border-t border-[#ece7dc] bg-white bg-opacity-80"
                   >
@@ -821,10 +1044,22 @@ function MapPage() {
                         value={chatInput}
                         onChange={(e) => setChatInput(e.target.value)}
                         disabled={!routeResult}
-                        placeholder={routeResult ? "Ask about traffic..." : "Search a route..."}
+                        placeholder={
+                          routeResult
+                            ? "Ask about traffic..."
+                            : "Search a route..."
+                        }
                         className="w-full bg-[#f8f6f1] border border-[#ece7dc] pl-3 pr-9 py-2.5 rounded-xl text-[12px] font-medium outline-none focus:border-[#f4b400] transition-colors disabled:opacity-50"
                       />
-                      <button type="submit" disabled={!chatInput.trim() || isAiLoading || !routeResult} className="absolute right-1.5 w-7 h-7 flex items-center justify-center bg-black text-[#f4b400] rounded-lg disabled:opacity-30">↑</button>
+                      <button
+                        type="submit"
+                        disabled={
+                          !chatInput.trim() || isAiLoading || !routeResult
+                        }
+                        className="absolute right-1.5 w-7 h-7 flex items-center justify-center bg-black text-[#f4b400] rounded-lg disabled:opacity-30"
+                      >
+                        ↑
+                      </button>
                     </div>
                   </form>
                 </div>
