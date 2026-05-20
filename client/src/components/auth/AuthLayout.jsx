@@ -1,3 +1,5 @@
+
+
 function AuthLayout({ children, title, subtitle }) {
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-[#fffdf8] to-[#f8f6f1] px-6 py-12">

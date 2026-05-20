@@ -14,16 +14,13 @@ function About() {
 
           <h1 className="mt-8 text-6xl font-black leading-tight text-black">
             Built for everyday
-            <span className="text-[#f4b400]">
-              {" "}
-              Filipino commuters.
-            </span>
+            <span className="text-[#f4b400]"> Filipino commuters.</span>
           </h1>
 
           <p className="mx-auto mt-8 max-w-3xl text-xl leading-relaxed text-[#5f6368]">
-            Komyut AI was created to help Metro Manila commuters navigate
-            the city smarter through route intelligence, transportation
-            insights, and AI-powered suggestions.
+            Komyut AI was created to help Metro Manila commuters navigate the
+            city smarter through route intelligence, transportation insights,
+            and AI-powered suggestions.
           </p>
         </div>
       </section>
@@ -51,13 +48,9 @@ function About() {
               key={index}
               className="rounded-[32px] border border-[#ece7dc] bg-[#f8f6f1] p-10"
             >
-              <h2 className="text-3xl font-black text-black">
-                {item.title}
-              </h2>
+              <h2 className="text-3xl font-black text-black">{item.title}</h2>
 
-              <p className="mt-6 leading-relaxed text-[#5f6368]">
-                {item.text}
-              </p>
+              <p className="mt-6 leading-relaxed text-[#5f6368]">{item.text}</p>
             </div>
           ))}
         </div>
@@ -77,14 +70,14 @@ function About() {
             </h2>
 
             <p className="mt-8 text-lg leading-relaxed text-black">
-              Daily commuting in Metro Manila can be stressful,
-              unpredictable, and time-consuming.
+              Daily commuting in Metro Manila can be stressful, unpredictable,
+              and time-consuming.
             </p>
 
             <p className="mt-6 text-lg leading-relaxed text-[#5f6368]">
-              Komyut AI was conceptualized to make commuting more
-              efficient by combining route planning, traffic insights,
-              and transportation intelligence into one platform.
+              Komyut AI was conceptualized to make commuting more efficient by
+              combining route planning, traffic insights, and transportation
+              intelligence into one platform.
             </p>
           </div>
 
@@ -92,9 +85,7 @@ function About() {
           <div className="rounded-[40px] bg-gradient-to-br from-[#ffe082] to-[#fff4d6] p-10">
             <div className="flex h-[420px] items-center justify-center rounded-[32px] bg-white">
               <div className="text-center">
-                <div className="text-8xl">
-                  🚆
-                </div>
+                <div className="text-8xl">🚆</div>
 
                 <h3 className="mt-6 text-3xl font-black text-black">
                   Metro Manila Transit

@@ -1,9 +1,4 @@
-import {
-  Clock3,
-  Route,
-  Wallet,
-  MapPin,
-} from "lucide-react";
+import { Clock3, Route, Wallet, MapPin } from "lucide-react";
 
 function Features() {
   const features = [
@@ -17,8 +12,7 @@ function Features() {
     {
       icon: Route,
       title: "Smart Route Suggestions",
-      description:
-        "AI-powered commute recommendations based on time, cost, and convenience.",
+      description: "AI-powered commute recommendations",
     },
 
     {
@@ -31,8 +25,7 @@ function Features() {
     {
       icon: MapPin,
       title: "Easy Terminal Guide",
-      description:
-        "Find terminals and stations across Metro Manila with ease.",
+      description: "Find terminals and stations across Metro Manila with ease.",
     },
   ];
 
@@ -43,10 +36,7 @@ function Features() {
         <div className="text-center">
           <h2 className="text-5xl font-bold leading-tight text-black">
             Why commute smarter with
-            <span className="text-[#f4b400]">
-              {" "}
-              Komyut AI?
-            </span>
+            <span className="text-[#f4b400]"> Komyut AI?</span>
           </h2>
 
           <div className="mx-auto mt-6 h-1.5 w-20 rounded-full bg-[#f4b400]"></div>
@@ -64,10 +54,7 @@ function Features() {
               >
                 {/* Icon */}
                 <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-[#fff4d6]">
-                  <Icon
-                    size={30}
-                    className="text-[#f4b400]"
-                  />
+                  <Icon size={30} className="text-[#f4b400]" />
                 </div>
 
                 {/* Text */}

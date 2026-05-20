@@ -1,3 +1,4 @@
+import logo from "../../assets/icons/logov3.png";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -78,18 +79,17 @@ function Login() {
 
           {/* Illustration */}
           <img
-            src="/images/login-illustration.png"
-            alt="Login Illustration"
+            src={logo}
+            alt="Komyut AI Logo"
             className="relative z-10 w-[65%] max-w-xs drop-shadow-2xl"
           />
-
           {/* Text */}
           <div className="relative z-10 mt-8 text-center">
-            <h2 className="text-2xl font-bold text-black">
+            <h2 className="text-2xl font-bold text-white/80">
               Smart Urban Commutes
             </h2>
 
-            <p className="mt-3 text-black/75 leading-relaxed max-w-xs text-sm">
+            <p className="mt-3 text-white/75 leading-relaxed max-w-xs text-sm">
               Access the Komyut AI admin dashboard and manage smarter transportation experiences across Metro Manila.
             </p>
           </div>
@@ -99,22 +99,12 @@ function Login() {
         <div className="flex items-center justify-center p-6 md:p-10">
           <div className="w-full max-w-sm">
 
-            {/* Logo */}
-            <div className="mb-8 flex items-center gap-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#f4b400] shadow-md">
-                <span className="text-xl">✦</span>
-              </div>
-
-              <div>
-                <h1 className="text-2xl font-extrabold tracking-tight text-black">
-                  komyut<span className="text-[#f4b400]">AI</span>
-                </h1>
-
-                <p className="text-xs text-[#5f6368]">
-                  Smart Urban Commutes
-                </p>
-              </div>
-            </div>
+         {/* Logo */}
+       <img
+            src={logo}
+            alt="Komyut AI Logo"
+            className="h-24 w-auto object-contain"
+          />
 
             {/* Heading */}
             <div className="mb-6">
