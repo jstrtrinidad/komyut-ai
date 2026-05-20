@@ -2,24 +2,24 @@ import { Link } from "react-router-dom";
 
 function NotFound() {
   return (
-    <section className="flex min-h-screen flex-col items-center justify-center bg-slate-950 px-6 text-center text-white">
-      <h1 className="text-8xl font-black text-cyan-400">
-        404
+    <section className="flex min-h-screen flex-col items-center justify-center bg-[#f8f6f1] px-6 text-center font-sans">
+      {/* 404 Header with Brand Colors */}
+      <h1 className="text-8xl font-black tracking-tight text-black">
+        40<span className="text-[#f4b400]">4</span>
       </h1>
 
-      <h2 className="mt-6 text-3xl font-bold">
-        Page Not Found
-      </h2>
+      <h2 className="mt-4 text-3xl font-bold text-black">Dead End</h2>
 
-      <p className="mt-4 max-w-md text-slate-400">
-        The page you are looking for does not exist or may have been moved.
+      <p className="mt-4 max-w-md text-lg leading-relaxed text-[#5f6368]">
+        The page you are looking for may have been moved or deleted.
       </p>
 
+      {/* Primary CTA Button */}
       <Link
         to="/"
-        className="mt-10 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 px-8 py-4 font-semibold text-white transition hover:scale-105"
+        className="mt-10 flex items-center gap-2 rounded-2xl bg-black px-8 py-4 font-bold text-white shadow-md transition-all hover:-translate-y-1 hover:bg-neutral-800"
       >
-        Back to Home
+        <span>←</span> Back to Page
       </Link>
     </section>
   );

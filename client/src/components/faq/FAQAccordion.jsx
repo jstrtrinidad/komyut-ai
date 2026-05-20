@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
-
 import faqData from "../../data/faqData";
 
 function FAQAccordion() {
@@ -19,7 +18,7 @@ function FAQAccordion() {
         >
           <button
             onClick={() => toggleAccordion(index)}
-            className="flex w-full items-center justify-between px-6 py-5 text-left"
+            className="flex w-full flex-col px-6 py-5 text-left transition hover:bg-[#faf7f2]"
           >
             <h3 className="text-lg font-bold text-black">
               {faq.question}
