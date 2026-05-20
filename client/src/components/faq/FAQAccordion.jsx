@@ -14,33 +14,12 @@ function FAQAccordion() {
       {faqData.map((faq, index) => (
         <div
           key={index}
-<<<<<<< HEAD
-          className="overflow-hidden rounded-[28px] border border-[#ece7dc] bg-white shadow-sm"
-=======
           className="overflow-hidden rounded-[28px] border border-[#f4d98b] bg-white"
->>>>>>> 72892e1adf728e51105c822c134a07223aebfa6b
         >
           <button
             onClick={() => toggleAccordion(index)}
             className="flex w-full flex-col px-6 py-5 text-left transition hover:bg-[#faf7f2]"
           >
-<<<<<<< HEAD
-            {/* NEW: Label/Category Section */}
-            <span className="mb-2 text-xs font-bold uppercase tracking-widest text-[#f4b400]">
-              {faq.category}
-            </span>
-
-            <div className="flex w-full items-center justify-between">
-              <h3 className="text-lg font-bold text-black">{faq.question}</h3>
-              <ChevronDown
-                className={`transition ${
-                  activeIndex === index
-                    ? "rotate-180 text-black"
-                    : "text-[#5f6368]"
-                }`}
-              />
-            </div>
-=======
             <h3 className="text-lg font-bold text-black">
               {faq.question}
             </h3>
@@ -52,18 +31,13 @@ function FAQAccordion() {
                   : "text-black"
               }`}
             />
->>>>>>> 72892e1adf728e51105c822c134a07223aebfa6b
           </button>
 
           {activeIndex === index && (
             <div className="px-6 pb-6">
-<<<<<<< HEAD
-              <p className="leading-relaxed text-[#5f6368]">{faq.answer}</p>
-=======
               <p className="leading-relaxed text-black">
                 {faq.answer}
               </p>
->>>>>>> 72892e1adf728e51105c822c134a07223aebfa6b
             </div>
           )}
         </div>
